@@ -1,0 +1,23 @@
+HELPING HANDS FOR ECHS — CHANGE 1 REVIEW PACKAGE
+
+START HERE
+1. Extract this ZIP to a folder.
+2. Double-click START_WEBSITE.bat, or open index.html in Chrome.
+
+CHANGE 1 INCLUDED
+- Four homepage boxes are in this order and numbered 1, 2, 3, 4:
+  1. ECHS VIDEO LIBRARY
+  2. SITUATION–SOLUTION
+  3. ECHS LATEST NEWS
+  4. ECHS POLICY LETTERS
+- Video Library details remain hidden until the visitor clicks the action in Box 1.
+- Situation–Solution details remain hidden until the visitor clicks the action in Box 2.
+- The caption EMPOWERING EVERY ECHS BENEFICIARY remains directly below the existing photograph and on one horizontal line.
+
+PRESERVATION
+- The uploaded source ZIP is not modified.
+- The PDF and its filename are retained unchanged.
+- No live website or GitHub files have been changed.
+- This is a local review copy only.
+
+PDF GUIDE: SITUATION_SOLUTION_GUIDE.pdf is stored in the same folder as index.html. Keep both files together after extraction.
