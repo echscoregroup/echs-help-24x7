@@ -1,1 +1,1 @@
-Helping Hands for ECHS website news display is being tested.
+ECHS NEWS: Monthly updates will be published here for all beneficiaries.
