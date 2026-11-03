@@ -1,0 +1,28 @@
+HELPING HANDS FOR ECHS — WEBSITE 2.0 DEVELOPMENT CANDIDATE
+
+Starting point:
+- User-facing V1.0 from echscoregroup/echs-help-24x7
+- Approved Admin-facing 1.0.1 changes 1–6
+- Change 6 confirmed by the administrator as approved for the 2.0 baseline
+
+Files:
+- index.html: approved website baseline with integrated public News display
+- news-admin.html: News management module with central JSON import/export
+- news-data.json: central public news data file (initially empty; no sample news)
+- SITUATION_SOLUTION_GUIDE.pdf: retained supporting PDF
+- README / START files: retained supporting files
+
+News publication workflow:
+1. Open news-admin.html in a browser.
+2. Load the latest news-data.json from the website before making changes.
+3. Add/edit news and mark approved items as Published.
+4. Export the complete central file as news-data.json.
+5. Upload/replace news-data.json in the GitHub 2.0 development branch and commit it.
+6. The public index reads this central file and displays published records dated within the latest 60 days.
+7. Older records remain in the central file; they are not deleted by the public 60-day filter.
+
+Important:
+- Local Save/Publish in the News Manager does not itself update GitHub.
+- The exported central JSON must be committed to GitHub for all public visitors to see the changes.
+- This is a development candidate, not a live release.
+- Do not overwrite the V1.0 main branch with this candidate until testing and explicit release approval.
