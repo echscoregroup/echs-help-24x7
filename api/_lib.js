@@ -5,10 +5,14 @@ function json(res, status, body) {
   res.setHeader("Cache-Control", "no-store");
   res.end(JSON.stringify(body));
 }
-function cookie(res, name, value, maxAge) {
-  res.setHeader("Set-Cookie", name+"="+value+"; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age="+maxAge);
+function appendCookie(res,value) {
+  const old=res.getHeader("Set-Cookie");
+  res.setHeader("Set-Cookie",old?(Array.isArray(old)?old.concat(value):[old,value]):value);
 }
-function clearCookie(res,name){res.setHeader("Set-Cookie",name+"=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0");}
+function cookie(res, name, value, maxAge) {
+  appendCookie(res,name+"="+value+"; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age="+maxAge);
+}
+function clearCookie(res,name){appendCookie(res,name+"=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0");}
 function secret(){if(!process.env.SESSION_SECRET)throw new Error("SESSION_SECRET is not configured");return crypto.createHash("sha256").update(process.env.SESSION_SECRET).digest();}
 function seal(value){
   const iv=crypto.randomBytes(12),c=crypto.createCipheriv("aes-256-gcm",secret(),iv);
