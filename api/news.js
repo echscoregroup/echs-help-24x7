@@ -1,3 +1,4 @@
+const crypto=require("node:crypto");
 const {json,requireAdmin,github}=require("./_lib");
 const repo=process.env.GITHUB_REPOSITORY||"echscoregroup/echs-help-24x7";
 const branch=process.env.GITHUB_BRANCH||"2.0-development";
