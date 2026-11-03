@@ -161,17 +161,12 @@ function saveDraft(){const clone=document.documentElement.cloneNode(true);clone.
 async function loadPublicNews(){
  const host=document.getElementById('hh-public-news-list'); if(!host)return;
  try{
-  const response=await fetch('./news-data.json',{cache:'no-store'});
-  if(!response.ok)throw new Error('News data is not available');
-  const payload=await response.json();
-  const records=Array.isArray(payload)?payload:(Array.isArray(payload.items)?payload.items:[]);
-  const today=new Date(); today.setHours(23,59,59,999);
-  const cutoff=new Date(today); cutoff.setDate(cutoff.getDate()-59); cutoff.setHours(0,0,0,0);
-  const toDate=v=>{if(/^\d{4}-\d{2}-\d{2}$/.test(v||'')){const [y,m,d]=v.split('-').map(Number);return new Date(y,m-1,d,12)} const mt=(v||'').match(/^(\d{2}) (\d{2}) (\d{4})$/);return mt?new Date(+mt[3],+mt[2]-1,+mt[1],12):null};
-  const visible=records.filter(n=>n&&n.status==='published'&&n.headline&&n.body&&toDate(n.date)&&toDate(n.date)>=cutoff&&toDate(n.date)<=today).sort((a,b)=>toDate(b.date)-toDate(a.date));
+  const response=await fetch('./news.md',{cache:'no-store'});
+  if(!response.ok)throw new Error('News file is not available');
+  const news=await response.text();
   host.replaceChildren();
-  if(!visible.length){const p=document.createElement('p');p.className='intro';p.textContent='No news updates are available for the latest 60 days.';host.append(p);return;}
-  visible.forEach(n=>{const card=document.createElement('article');card.className='hh-public-news-item';const d=document.createElement('div');d.className='hh-public-news-date';const dt=toDate(n.date);d.textContent=String(dt.getDate()).padStart(2,'0')+' '+String(dt.getMonth()+1).padStart(2,'0')+' '+dt.getFullYear();const h=document.createElement('h4');h.textContent=n.headline;const body=document.createElement('p');body.textContent=n.body;card.append(d,h,body);host.append(card);});
+  if(!news.trim()){const p=document.createElement('p');p.className='intro';p.textContent='No news announcements are available.';host.append(p);return;}
+  const card=document.createElement('article');card.className='hh-public-news-item';card.innerHTML=news;host.append(card);
  }catch(err){host.replaceChildren();const p=document.createElement('p');p.className='intro';p.textContent='Latest news could not be loaded at this time.';host.append(p);console.error('HH public news:',err);}
 }
 loadPublicNews();
