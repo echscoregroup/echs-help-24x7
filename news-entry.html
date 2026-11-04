@@ -28,7 +28,7 @@ footer{max-width:850px;margin:0 auto;padding:0 18px 30px;color:var(--muted);font
 <header><h1>HELPING HANDS FOR ECHS</h1><p>NEWS ENTRY WORKSPACE</p></header>
 <main><section class="panel">
 <div class="note"><strong>Enter your news here.</strong><br>After preparing the update, download the updated <code>news.md</code> file. The final publishing step is to replace <code>news.md</code> in the GitHub <strong>2.0-development</strong> branch and commit the change. This page does not publish automatically.</div>
-<div id="loadState" class="small">Loading the existing NEWS file…</div>
+<label for="existingNewsFile">SELECT YOUR EXISTING news.md FILE</label><input id="existingNewsFile" type="file" accept=".md,text/markdown,text/plain"><div id="loadState" class="small">Select the existing news.md file from your development folder before entering a new item.</div>
 <label for="newsDate">NEWS DATE</label><input id="newsDate" type="date" required>
 <label for="newsHeading">NEWS HEADING</label><input id="newsHeading" type="text" maxlength="120" placeholder="Enter a short heading" required>
 <label for="newsText">NEWS CONTENT</label><textarea id="newsText" maxlength="1800" placeholder="Write your news in a few clear sentences…" required></textarea>
@@ -45,21 +45,25 @@ const monthNames = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AU
 function monthTitle(date){return monthNames[date.getMonth()]+" "+date.getFullYear();}
 function displayDate(date){return String(date.getDate()).padStart(2,"0")+" "+monthNames[date.getMonth()].slice(0,3)+" "+date.getFullYear();}
 function setStatus(message){$("status").textContent=message;}
-async function loadNews(){
+function setToday(){
  const d=new Date(); $("newsDate").value=[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");
- try{
-  const response=await fetch("./news.md?refresh="+Date.now(),{cache:"no-store"});
-  if(!response.ok)throw new Error("HTTP "+response.status);
-  originalNews=await response.text();
-  $("loadState").textContent="Existing NEWS loaded successfully. You can now enter a new item.";
-  setStatus("Ready. Enter your news and select PREPARE NEWS FILE.");
- }catch(error){
-  $("loadState").textContent="Could not load news.md automatically.";
-  setStatus("For local testing, keep this page in the same folder as news.md and open it through your local web server. Error: "+error.message);
- }
 }
+$("existingNewsFile").addEventListener("change",async event=>{
+ const file=event.target.files && event.target.files[0];
+ if(!file){originalNews=null;return;}
+ try{
+  originalNews=await file.text();
+  $("loadState").textContent="Existing NEWS file loaded: "+file.name;
+  setStatus("Ready. Your existing NEWS has been loaded. Enter your new item.");
+ }catch(error){
+  originalNews=null;
+  $("loadState").textContent="Could not read the selected file.";
+  setStatus("Please select news.md again. "+error.message);
+ }
+});
+setToday();
 function prepare(){
- if(originalNews===null){setStatus("The existing news.md has not loaded. Refresh this page and check the local server.");return;}
+ if(originalNews===null){setStatus("Please select your existing news.md file first.");return;}
  const dateValue=$("newsDate").value, heading=$("newsHeading").value.trim(), body=$("newsText").value.trim().replace(/\s+/g," ");
  if(!dateValue||!heading||!body){setStatus("Please enter the date, heading and news content.");return;}
  const date=new Date(dateValue+"T12:00:00");
@@ -77,6 +81,6 @@ function prepare(){
 }
 $("prepare").addEventListener("click",prepare);
 $("clear").addEventListener("click",()=>{$("newsHeading").value="";$("newsText").value="";$("preview").style.display="none";setStatus("Entry cleared. The existing NEWS file is unchanged.");});
-loadNews();
+
 </script>
 </body></html>
