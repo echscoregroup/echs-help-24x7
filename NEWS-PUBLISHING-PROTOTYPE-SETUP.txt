@@ -1,0 +1,45 @@
+HELPING HANDS FOR ECHS — SECURE NEWS PUBLISHING PROTOTYPE
+Development branch only: 2.0-development
+Production repositories/branches are not used or modified.
+
+WHAT THIS PROTOTYPE DOES
+- Adds a simple NEWS ADMIN page.
+- Administrator signs in with GitHub.
+- The server verifies the signed-in GitHub account against ADMIN_GITHUB_LOGIN.
+- The GitHub access token is kept in an encrypted, HttpOnly, Secure cookie; it is not placed in browser JavaScript.
+- PUBLISH validates date, headline and plain-text content, then commits news-data.json to 2.0-development.
+- Existing news records are retained and newest dates are sorted first.
+- Public site continues to read news-data.json.
+
+IMPORTANT LIMITATION
+This is source code for a prototype, not yet a live working service. GitHub Pages alone cannot run the API routes. A Vercel deployment (or equivalent Node serverless host), GitHub App OAuth credentials and environment variables must be configured before the button can publish. Do not enter GitHub tokens into the HTML page.
+
+REQUIRED HOSTING CONFIGURATION
+1. Create a Vercel project from echscoregroup/echs-help-24x7 and select branch 2.0-development.
+2. Configure APP_BASE_URL to the assigned HTTPS Vercel deployment URL.
+3. Create a GitHub App OAuth user authorization flow / GitHub App and configure its callback URL as APP_BASE_URL + /api/auth/callback.
+4. Install the GitHub App only on echscoregroup/echs-help-24x7 and grant Contents: Read and write. Use GitHub App user authorization (not a broad personal access token).
+5. Set environment variables:
+   APP_BASE_URL = exact HTTPS Vercel deployment URL
+   GITHUB_APP_CLIENT_ID = GitHub App client ID
+   GITHUB_APP_CLIENT_SECRET = GitHub App client secret
+   ADMIN_GITHUB_LOGIN = authorised GitHub login
+   SESSION_SECRET = long random secret (32+ random bytes)
+   GITHUB_REPOSITORY = echscoregroup/echs-help-24x7
+   GITHUB_BRANCH = 2.0-development
+6. Redeploy after setting variables.
+
+TESTS BEFORE USE
+- Unauthenticated visitor cannot publish.
+- Only the configured GitHub login can sign in.
+- Successful publish creates a commit only on 2.0-development.
+- Invalid/missing fields are rejected.
+- Existing news is retained.
+- Public news appears on the development site.
+- No credential appears in page source, browser storage, or network responses.
+
+NOT YET INCLUDED
+- Editing and deleting previously published items.
+- Deployment configuration and real OAuth credentials.
+- Full end-to-end test on a hosted development URL.
+These must be completed and tested before calling this a working publishing feature.
