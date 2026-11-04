@@ -180,7 +180,15 @@ async function loadPublicNews(){
    const message=messageBuffer.join(' ').trim(); messageBuffer=[];
    if(!message||!monthSection)return;
    const item=document.createElement('article');item.className='hh-public-news-item';
-   const p=document.createElement('p');p.textContent=message;item.append(p);monthSection.append(item);
+   const dated=message.match(/^(\d{1,2}\s+[A-Z]{3}\s+20\d{2})\s+—\s+([^:]+):\s*([\s\S]*)$/);
+   if(dated){
+    const date=document.createElement('div');date.className='hh-public-news-date';date.textContent=dated[1];item.append(date);
+    const heading=document.createElement('h4');heading.textContent=dated[2].trim();item.append(heading);
+    const p=document.createElement('p');p.textContent=dated[3].trim();item.append(p);
+   }else{
+    const p=document.createElement('p');p.textContent=message;item.append(p);
+   }
+   monthSection.append(item);
   };
   lines.forEach(line=>{
    const value=line.trim();
@@ -190,6 +198,7 @@ async function loadPublicNews(){
    if(/^<\/p>$/i.test(value))return;
    if(/^[A-Z][A-Z ]+\s+20\d{2}$/.test(value)){flushMessage();monthSection=document.createElement('section');monthSection.className='hh-public-news-month';const h=document.createElement('h4');h.textContent=value;monthSection.append(h);host.append(monthSection);return;}
    messageBuffer.push(value.replace(/^[-*]\s+/,''));
+   flushMessage();
   });
   flushMessage();
  }catch(err){host.replaceChildren();const p=document.createElement('p');p.className='intro';p.textContent='Latest news could not be loaded at this time.';host.append(p);console.error('HH public news:',err);}
