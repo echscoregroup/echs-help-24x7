@@ -68,7 +68,7 @@ function prepare(){
  const lines=originalNews.replace(/\r/g,"").trim().split("\n");
  const idx=lines.findIndex(line=>line.trim().toUpperCase()===title);
  let updated;
- if(idx>=0){lines.splice(idx+1,0,entry);updated=lines.join("\n")+"\n";}
+ if(idx>=0){lines.splice(idx+1,0,entry,"");updated=lines.join("\n")+"\n";}
  else{updated=title+"\n"+entry+"\n\n"+originalNews.replace(/^\s+/,"");}
  const blob=new Blob([updated],{type:"text/markdown;charset=utf-8"});
  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="news.md";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
