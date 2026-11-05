@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="hh-build" content="1.0.3">
+<!-- Helping Hands for ECHS build 1.0.3: Search disabled pending implementation. -->
 <title>Helping Hands for ECHS | News, Videos, Policy Letters & Situation–Solution</title>
 <meta name="description" content="Helping Hands for ECHS provides ECHS beneficiaries and families with practical ECHS videos, policy letters, latest updates, FAQs, guides and instant help.">
 <meta name="keywords" content="ECHS, ECHS beneficiaries, ECHS policy letters, ECHS news, ECHS videos, ECHS help, ex-servicemen healthcare">
@@ -24,6 +26,7 @@ main{max-width:1450px;margin:auto;padding:46px 5% 58px}
 .hero p{font-size:17px;line-height:1.65;color:var(--muted);margin:0 0 7px}
 .search{display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px;margin:31px 0 40px;box-shadow:0 6px 20px #132b4308}
 .search input{flex:1;min-width:0;border:0;padding:12px;font-size:15px;outline:none;color:var(--ink)}.search button{border:0;border-radius:8px;background:var(--gold);color:var(--navy);font-weight:900;padding:0 24px}
+.search.search-disabled{background:#f1f3f5;border-color:#d1d5db;box-shadow:none}.search.search-disabled input:disabled{background:transparent;color:#6b7280;cursor:not-allowed}.search.search-disabled input:disabled::placeholder{color:#6b7280;opacity:1}.search.search-disabled button:disabled{background:#d1d5db;color:#6b7280;cursor:not-allowed}
 .section h3{font-size:18px;color:var(--navy);letter-spacing:.075em;margin:0 0 8px}.section .intro{font-size:14px;color:var(--muted);margin:0 0 20px}
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 18px;min-height:260px;box-shadow:0 8px 24px #132b4309;display:flex;flex-direction:column}
@@ -87,9 +90,9 @@ footer{background:var(--navy);color:#fff;padding:25px 5%;display:flex;justify-co
 <p contenteditable="true">Find ECHS videos, policy letters, latest news, beneficiary guides and instant help.</p>
 <p contenteditable="true">Reliable information, clearly organised to help you take the next step.</p>
 </section>
-<form class="search" onsubmit="return false" role="search" aria-label="Search ECHS information">
-<input type="search" placeholder="Search ECHS topics, policy letters, videos or beneficiary questions…" aria-label="Search ECHS information">
-<button type="submit">SEARCH</button>
+<form class="search search-disabled" onsubmit="return false" role="search" aria-label="Search ECHS information — currently unavailable">
+<input type="search" placeholder="Search facility currently unavailable" aria-label="Search ECHS information" disabled>
+<button type="submit" disabled>SEARCH</button>
 </form>
 <section class="section"><h3 contenteditable="true">FIND ECHS INFORMATION BY SUBJECT</h3><p class="intro" contenteditable="true">Choose the service you need.</p>
 <div class="cards">
