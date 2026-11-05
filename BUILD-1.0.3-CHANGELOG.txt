@@ -1,0 +1,22 @@
+HELPING HANDS FOR ECHS
+ADMIN-FACING BUILD RECORD
+
+Build: HH-WEBSITE-ADMIN-FACING-1.0.3
+Branch: HH-WEBSITE-ADMIN-FACING-1.0.3
+Repository: echscoregroup/echs-help-24x7
+Baseline: Approved website build 1.0.2
+Date: 05 November 2026
+
+CHANGE IN BUILD 1.0.3
+1. The Search control is greyed out.
+2. The Search input is disabled.
+3. The Search button is disabled.
+4. The visible placeholder message is: "Under Development".
+
+PURPOSE
+This change makes it clear to users that the Search facility is not yet available. No Search functionality is implemented by this change.
+
+CONTROL / RELEASE NOTE
+This is the tested admin-facing 1.0.3 build. Use this branch as the controlled baseline for subsequent admin-facing development, subject to approval. Do not treat this branch as the production user-facing release.
+
+Production repository echscoregroup/ECHSHELP, branch main, was not changed as part of this build.
