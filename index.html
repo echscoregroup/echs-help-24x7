@@ -169,6 +169,9 @@ document.addEventListener('DOMContentLoaded',function(){
    return {ok:false,message:error&&error.name==='QuotaExceededError'?'Browser storage is full. Changes are shown only until this page is closed.':'Browser storage is unavailable for this local file. Changes are shown only until this page is closed.'};
   }
  };
+ const setStatus=message=>{$('hh-admin-status').textContent=message;};
+ const clearStatus=()=>setStatus('Ready. No changes saved yet.');
+ const snapshot=rows=>JSON.stringify(rows);
  function render(){
   topics().forEach((t,i)=>{
    const list=t.querySelector('.hh-video-list'); if(!list)return;
@@ -210,29 +213,54 @@ document.addEventListener('DOMContentLoaded',function(){
   $('hh-video-admin-toggle').textContent=open?'VIDEO LIBRARY ADMIN — CLOSE':'VIDEO LIBRARY ADMIN — OPEN';
   $('hh-video-admin-toggle').setAttribute('aria-expanded',String(open));
  });
- ['hh-admin-action','hh-admin-category','hh-admin-existing','hh-admin-position'].forEach(id=>$(id).addEventListener('change',()=>{if(id==='hh-admin-category')fillSelects();else updateAction()}));
- $('hh-admin-cancel').addEventListener('click',()=>{$('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';$('hh-admin-status').textContent='Form cleared.';});
+ ['hh-admin-action','hh-admin-category','hh-admin-existing','hh-admin-position'].forEach(id=>$(id).addEventListener('change',()=>{if(id==='hh-admin-category')fillSelects();else updateAction();clearStatus();}));
+ ['hh-admin-number','hh-admin-title','hh-admin-url'].forEach(id=>$(id).addEventListener('input',clearStatus));
+ $('hh-admin-cancel').addEventListener('click',()=>{$('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';clearStatus();});
  $('hh-admin-save').addEventListener('click',()=>{
-  const action=$('hh-admin-action').value,ci=Number($('hh-admin-category').value),rows=data[ci]?.rows;
-  if(!rows){$('hh-admin-status').textContent='Select a category.';return;}
-  if(action==='delete'){
-   const ix=Number($('hh-admin-existing').value);if(!rows[ix])return;
-   if(!confirm('Delete '+rows[ix].number+' — '+rows[ix].title+'?'))return;
-   rows.splice(ix,1);
-  }else{
+  const action=$('hh-admin-action').value;
+  const ci=Number($('hh-admin-category').value);
+  const category=data[ci];
+  if(!category||!Array.isArray(category.rows)){setStatus('ERROR: Select a valid category.');return;}
+  const rows=category.rows;
+  if(action==='add'){
    const item={number:$('hh-admin-number').value.trim(),title:$('hh-admin-title').value.trim(),url:$('hh-admin-url').value.trim()};
-   if(!item.number||!item.title||!/^https:\/\//i.test(item.url)){ $('hh-admin-status').textContent='Enter video number, title and a valid https URL.';return;}
-   if(action==='edit'){const ix=Number($('hh-admin-existing').value);if(!rows[ix])return;rows[ix]=item;}
-   else{
-    const pos=$('hh-admin-position').value;let at=0;
-    if(pos==='last')at=rows.length;
-    if(pos==='after'){const ix=Number($('hh-admin-after').value);at=Number.isFinite(ix)?ix+1:rows.length;}
-    rows.splice(at,0,item);
+   if(!item.number||!item.title||!/^https:\/\//i.test(item.url)){setStatus('ERROR: Enter video number, title and a valid https URL.');return;}
+   const pos=$('hh-admin-position').value;
+   let at=0;
+   if(pos==='last')at=rows.length;
+   if(pos==='after'){
+    const selected=$('hh-admin-after').selectedOptions[0];
+    if(!selected){setStatus('ERROR: Select the video to insert after.');return;}
+    const selectedText=selected.textContent;
+    const selectedNumber=selectedText.split(' — ')[0].trim();
+    const ix=rows.findIndex(r=>r.number===selectedNumber);
+    if(ix<0){setStatus('ERROR: The selected reference video was not found. No change made.');return;}
+    at=ix+1;
+   }
+   const before=snapshot(rows);
+   rows.splice(at,0,item);
+   if(rows.length!==JSON.parse(before).length+1||rows[at]!==item){
+    category.rows=JSON.parse(before);
+    setStatus('ERROR: Insert verification failed. No change saved.');
+    return;
+   }
+  }else{
+   const ix=Number($('hh-admin-existing').value);
+   if(!Number.isInteger(ix)||!rows[ix]){setStatus('ERROR: Select an existing video.');return;}
+   if(action==='delete'){
+    if(!confirm('Delete '+rows[ix].number+' — '+rows[ix].title+'?'))return;
+    rows.splice(ix,1);
+   }else if(action==='edit'){
+    const item={number:$('hh-admin-number').value.trim(),title:$('hh-admin-title').value.trim(),url:$('hh-admin-url').value.trim()};
+    if(!item.number||!item.title||!/^https:\/\//i.test(item.url)){setStatus('ERROR: Enter video number, title and a valid https URL.');return;}
+    rows[ix]=item;
    }
   }
   const saveResult=persist();
-  render();$('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';
-  $('hh-admin-status').textContent=saveResult.ok?'SUCCESS: Video change saved in this browser. Refresh to confirm it remains.':'CHANGE APPLIED ON THIS PAGE ONLY. '+saveResult.message;
+  if(!saveResult.ok){setStatus('ERROR: '+saveResult.message);return;}
+  render();
+  $('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';
+  setStatus('SUCCESS: Video change saved in this browser.');
  });
  render();
 });
