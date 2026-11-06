@@ -160,7 +160,15 @@ document.addEventListener('DOMContentLoaded',function(){
  if(!Array.isArray(data)){
   data=topics().map(t=>({category:topicName(t),rows:readRows(t)}));
  }
- const persist=()=>localStorage.setItem(storeKey,JSON.stringify(data));
+ const persist=()=>{
+  try{
+   localStorage.setItem(storeKey,JSON.stringify(data));
+   return {ok:true};
+  }catch(error){
+   console.error('HH Video Admin storage error:',error);
+   return {ok:false,message:error&&error.name==='QuotaExceededError'?'Browser storage is full. Changes are shown only until this page is closed.':'Browser storage is unavailable for this local file. Changes are shown only until this page is closed.'};
+  }
+ };
  function render(){
   topics().forEach((t,i)=>{
    const list=t.querySelector('.hh-video-list'); if(!list)return;
@@ -222,8 +230,9 @@ document.addEventListener('DOMContentLoaded',function(){
     rows.splice(at,0,item);
    }
   }
-  persist();render();$('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';
-  $('hh-admin-status').textContent='Saved in this browser. Refresh the page to confirm it remains.';
+  const saveResult=persist();
+  render();$('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';
+  $('hh-admin-status').textContent=saveResult.ok?'SUCCESS: Video change saved in this browser. Refresh to confirm it remains.':'CHANGE APPLIED ON THIS PAGE ONLY. '+saveResult.message;
  });
  render();
 });
