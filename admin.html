@@ -2,111 +2,88 @@
 <html lang="en-IN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Helping Hands for ECHS | Admin 1.0.0</title>
+<title>Helping Hands for ECHS — Build 1.0.4 Admin</title>
 <style>
-:root{--navy:#0b1f3a;--gold:#c6a45a;--ivory:#f7f6f2;--ink:#1d2b3a;--line:#dfe4ea}
+:root{--navy:#0b1f3a;--gold:#c6a45a;--ivory:#f7f6f2;--ink:#1d2b3a;--line:#dfe4ea;--teal:#286c70}
 *{box-sizing:border-box}body{margin:0;background:var(--ivory);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
-header{background:var(--navy);color:#fff;padding:18px 4%;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-header h1{font-size:21px;margin:0}header p{margin:5px 0 0;color:#e8d9b4;font-size:13px}
-a,button{cursor:pointer}button{border:0;border-radius:5px;padding:10px 14px;font-weight:700;background:var(--navy);color:white}button.secondary{background:#e8edf2;color:var(--navy);border:1px solid #cbd4de}button.danger{background:#9b2c2c}
-.wrap{max-width:1500px;margin:auto;padding:20px 3% 40px}
-.notice{background:#fff8e8;border:1px solid #e3cd94;padding:12px 15px;border-radius:7px;font-size:13px;line-height:1.5;margin-bottom:18px}
-.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);gap:18px;align-items:start}
-.panel{background:white;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:18px}
-.panel h2{font-size:17px;color:var(--navy);margin:0;padding:14px 16px;border-bottom:1px solid var(--line);background:#f8fafc}
-.panel .body{padding:15px}
-iframe{width:100%;height:1050px;border:0;display:block;background:white}
-label{display:block;font-size:12px;font-weight:700;margin:10px 0 5px}
-input,textarea,select{width:100%;padding:9px;border:1px solid #cbd4de;border-radius:5px;font:14px Arial;background:#fff}
-textarea{min-height:80px;resize:vertical}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.small{font-size:12px;color:#5b6876;line-height:1.45}
-.item{border:1px solid var(--line);border-radius:6px;padding:10px;margin:9px 0}
-.item strong{display:block;color:var(--navy);font-size:13px}.item p{font-size:12px;margin:5px 0;white-space:pre-wrap}
-.list{max-height:250px;overflow:auto}
-footer{text-align:center;color:#697687;font-size:11px;padding:18px}
-@media(max-width:900px){.layout{grid-template-columns:1fr}iframe{height:900px}.row{grid-template-columns:1fr}}
+header{background:var(--navy);color:#fff;padding:18px 4%;border-bottom:5px solid var(--gold)}header h1{margin:0;font-size:22px}header p{margin:6px 0 0;color:#e8d9b4;font-size:13px}
+main{max-width:1250px;margin:auto;padding:22px 3% 50px}.notice{background:#fff8e8;border:1px solid #e3cd94;padding:13px 16px;border-radius:8px;line-height:1.5;font-size:13px;margin-bottom:18px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:9px;margin:16px 0;overflow:hidden}.panel h2{font-size:17px;color:var(--navy);margin:0;padding:14px 16px;background:#f8fafc;border-bottom:1px solid var(--line)}.body{padding:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{margin:10px 0}label{display:block;font-size:12px;font-weight:800;margin:0 0 5px}input,select{width:100%;padding:10px;border:1px solid #cbd4de;border-radius:5px;font:14px Arial;background:white}button{border:0;border-radius:5px;padding:10px 14px;font-weight:800;background:var(--navy);color:white;cursor:pointer}button.secondary{background:#e8edf2;color:var(--navy);border:1px solid #cbd4de}button.danger{background:#9b2c2c}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.small{font-size:12px;color:#5b6876;line-height:1.5}.list{display:grid;gap:8px;margin-top:14px}.item{border:1px solid var(--line);border-radius:7px;padding:11px}.item strong{display:block;color:var(--navy);font-size:13px}.item .meta{font-size:12px;color:#5b6876;margin:5px 0;overflow-wrap:anywhere}.item .actions{margin-top:8px}.status{font-size:13px;font-weight:700;color:var(--teal);margin-top:10px}.hidden{display:none!important}
+@media(max-width:720px){.grid{grid-template-columns:1fr}header h1{font-size:18px}}
 </style>
 </head>
 <body>
-<header><div><h1>HELPING HANDS FOR ECHS — ADMINISTRATION</h1><p>ADMIN FACING VERSION 1.0.2 · MATCHED TO BENEFICIARY-FACING 1.0.2</p></div>
-<div class="actions"><a href="index.html" target="_blank"><button class="secondary">Open User-facing Screen</button></a></div></header>
-<div class="wrap">
-<div class="notice"><strong>ADMIN PILOT — LOCAL WORKING COPY ONLY.</strong> The public website screen shown on the left is loaded directly from <code>index.html</code> and has not been edited. The management entries in this pilot are stored in this browser only. They are not connected to the live website, a server, or GitHub. Deleting a video entry here does not delete its YouTube video or remove it from the public screen.</div>
-<div class="layout">
-<section class="panel"><h2>BENEFICIARY-FACING WEBSITE — VERSION 1.0.2</h2><iframe src="index.html" title="User-facing website preview"></iframe></section>
-<aside>
-<section class="panel"><h2>1. FEEDBACK MANAGEMENT</h2><div class="body">
-<p class="small">Record feedback received by the administrator. Export a month-wise report with the latest month first. This pilot does not retrieve feedback automatically from WhatsApp or other channels.</p>
-<div class="row"><div><label for="fbdate">Date received</label><input id="fbdate" type="date"></div><div><label for="fbcat">Category</label><select id="fbcat"><option>Website</option><option>Video</option><option>ECHS information</option><option>Suggestion</option><option>Other</option></select></div></div>
-<label for="fbsubject">Subject</label><input id="fbsubject" placeholder="Short subject">
-<label for="fbtext">Feedback (retain original wording)</label><textarea id="fbtext" placeholder="Enter feedback exactly as received"></textarea>
-<div class="row"><div><label for="fbstatus">Status</label><select id="fbstatus"><option>New</option><option>Under review</option><option>Action taken</option><option>Closed</option></select></div><div><label for="fbaction">Action / remarks</label><input id="fbaction" placeholder="Action or follow-up"></div></div>
-<div class="actions"><button onclick="addFeedback()">Add Feedback</button><button class="secondary" onclick="exportFeedback()">Export Month-wise CSV</button></div>
-<div id="feedbackList" class="list"></div>
+<header><h1>HELPING HANDS FOR ECHS — ADMINISTRATION</h1><p>BUILD 1.0.4 · VIDEO LIBRARY + SITUATION–SOLUTION MANAGEMENT</p></header>
+<main>
+<div class="notice"><strong>CONTROLLED ADMIN WORKFLOW.</strong> This static GitHub Pages admin prepares an updated website file in your browser. It does not write directly to GitHub. Load the current <b>index.html</b>, make the approved changes, then download the updated file and replace <b>index.html</b> in the Dev working branch. Production is not connected or modified. Keep a backup of the original file.</div>
+<section class="panel"><h2>START — LOAD THE CURRENT DEV WEBSITE FILE</h2><div class="body">
+<div class="field"><label for="siteFile">Select current index.html from the Dev working branch</label><input id="siteFile" type="file" accept=".html,text/html"></div>
+<div id="loadStatus" class="status">No website file loaded.</div>
+<div class="actions"><button id="downloadSite" disabled>Download Updated index.html</button><button class="secondary" id="resetAll" disabled>Discard Changes &amp; Reload Original</button></div>
+<p class="small">The editor works on the file you select. It preserves the other website content and changes only the Video Library and Situation–Solution sections.</p>
 </div></section>
-<section class="panel"><h2>2. NEWS &amp; IMPROVEMENTS</h2><div class="body">
-<p class="small">Prepare text for the existing ECHS Latest News area. Publishing is not automatic; approved text must be implemented through the controlled release process.</p>
-<label for="newsTitle">News heading</label><input id="newsTitle" placeholder="Enter heading">
-<label for="newsText">News / improvement text</label><textarea id="newsText" placeholder="Write the update"></textarea>
-<div class="actions"><button onclick="saveNewsDraft()">Save Local Draft</button><button class="secondary" onclick="downloadNews()">Download Text</button></div>
-<p id="newsMsg" class="small">No draft saved in this browser session.</p>
+<section class="panel"><h2>BOX 1 — VIDEO LIBRARY ADMIN</h2><div class="body">
+<div class="grid"><div class="field"><label for="categorySelect">Select category</label><select id="categorySelect" disabled></select></div><div class="field"><label for="categoryName">New category name</label><input id="categoryName" placeholder="Enter a new subject/category" disabled></div></div>
+<div class="actions"><button id="addCategory" disabled>Create Category</button><button id="renameCategory" class="secondary" disabled>Rename Selected Category</button></div>
+<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+<div class="grid"><div class="field"><label for="videoNumber">Video number</label><input id="videoNumber" placeholder="e.g. V 158" disabled></div><div class="field"><label for="videoTitle">Video title</label><input id="videoTitle" placeholder="Enter video title" disabled></div></div>
+<div class="field"><label for="videoUrl">YouTube URL</label><input id="videoUrl" placeholder="https://youtu.be/..." disabled></div>
+<div class="actions"><button id="saveVideo" disabled>Add Video to Selected Category</button><button id="clearVideo" class="secondary" disabled>Clear Fields</button></div>
+<div id="videoList" class="list"><p class="small">Load index.html to display categories and videos.</p></div>
 </div></section>
-<section class="panel"><h2>3. VIDEO BOX MANAGEMENT</h2><div class="body">
-<p class="small">Maintain a local working list of video entries for review. Add, edit or remove entries from this draft list. These actions do not alter the public Video Library or YouTube.</p>
-<label for="vidcat">Video box / category</label><select id="vidcat"><option>ECHS VIDEO LIBRARY</option><option>SITUATION–SOLUTION</option></select>
-<label for="vidtitle">Video title</label><input id="vidtitle" placeholder="Video title">
-<div class="row"><div><label for="vidno">Video number</label><input id="vidno" placeholder="e.g. V155"></div><div><label for="vidurl">Video URL</label><input id="vidurl" placeholder="https://..."></div></div>
-<label for="viddesc">Description</label><textarea id="viddesc" placeholder="Short description"></textarea>
-<div class="actions"><button onclick="saveVideo()">Add / Update Entry</button><button class="secondary" onclick="clearVideoForm()">Clear Form</button></div>
-<div id="videoList" class="list"></div>
+<section class="panel"><h2>BOX 2 — SITUATION–SOLUTION ADMIN</h2><div class="body">
+<p class="small">Manage the videos and PDF cards in the Situation–Solution section. The original PDF card title is retained as <b>YOUR SITUATION – MY VIDEO SOLUTION</b>. Its description is removed. The original guide filename remains <b>SITUATION_SOLUTION_GUIDE.pdf</b>.</p>
+<div class="grid"><div class="field"><label for="ssNumber">Video number</label><input id="ssNumber" placeholder="e.g. V154" disabled></div><div class="field"><label for="ssTitle">Video title</label><input id="ssTitle" placeholder="Enter video title" disabled></div></div>
+<div class="field"><label for="ssUrl">YouTube URL</label><input id="ssUrl" placeholder="https://youtu.be/..." disabled></div>
+<div class="actions"><button id="addSSVideo" disabled>Add Situation–Solution Video</button><button id="clearSSVideo" class="secondary" disabled>Clear Fields</button></div>
+<div id="ssVideoList" class="list"><p class="small">Load index.html to display Situation–Solution videos.</p></div>
+<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+<div class="grid"><div class="field"><label for="pdfTitle">PDF card title</label><input id="pdfTitle" value="YOUR SITUATION – MY VIDEO SOLUTION" disabled></div><div class="field"><label for="pdfName">PDF filename (without path)</label><input id="pdfName" value="SITUATION_SOLUTION_GUIDE.pdf" disabled></div></div>
+<div class="field"><label for="pdfFile">Select PDF file to add / replace</label><input id="pdfFile" type="file" accept="application/pdf,.pdf" disabled></div>
+<div class="actions"><button id="addPdf" disabled>Add PDF Card</button><button id="replacePdf" class="secondary" disabled>Replace Existing Guide PDF</button></div>
+<div id="pdfList" class="list"><p class="small">Load index.html to display PDF cards.</p></div>
 </div></section>
-</aside></div></div>
-<footer>HH WEBSITE ADMIN FACING 1.0.2 · Separate pilot interface · Public baseline content retained unchanged</footer>
+</main>
 <script>
-const KEY='hh_admin_100_';
-let feedback=JSON.parse(localStorage.getItem(KEY+'feedback')||'[]');
-let videos=JSON.parse(localStorage.getItem(KEY+'videos')||'[]');
-let editingVideo=-1;
-function persist(){localStorage.setItem(KEY+'feedback',JSON.stringify(feedback));localStorage.setItem(KEY+'videos',JSON.stringify(videos))}
-function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function renderFeedback(){
- const el=document.getElementById('feedbackList');
- el.innerHTML=feedback.slice().sort((a,b)=>b.date.localeCompare(a.date)).map((f,i)=>`<div class="item"><strong>${esc(f.date)} · ${esc(f.subject||'(No subject)')}</strong><p>${esc(f.category)} · ${esc(f.status)}</p><p>${esc(f.text)}</p><p>Action: ${esc(f.action)}</p><button class="danger" onclick="deleteFeedback(${feedback.indexOf(f)})">Delete record</button></div>`).join('')||'<p class="small">No feedback records entered yet.</p>';
-}
-function addFeedback(){
- const date=document.getElementById('fbdate').value, text=document.getElementById('fbtext').value.trim();
- if(!date||!text){alert('Enter the date and feedback.');return}
- feedback.push({date,category:fbcat.value,subject:fbsubject.value,text,status:fbstatus.value,action:fbaction.value});
- persist();renderFeedback();fbsubject.value='';fbtext.value='';fbaction.value='';
-}
-function deleteFeedback(i){if(confirm('Delete this local feedback record?')){feedback.splice(i,1);persist();renderFeedback()}}
-function exportFeedback(){
- if(!feedback.length){alert('There are no feedback records to export.');return}
- const sorted=feedback.slice().sort((a,b)=>b.date.localeCompare(a.date));
- const groups={};sorted.forEach(f=>{const m=f.date.slice(0,7);(groups[m]??=[]).push(f)});
- const rows=[['Month','Date','Category','Subject','Feedback','Status','Action / remarks']];
- Object.keys(groups).sort().reverse().forEach(m=>groups[m].forEach(f=>rows.push([m,...['date','category','subject','text','status','action'].map(k=>f[k])])));
- const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
- const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='HH_FEEDBACK_MONTHWISE_LATEST_FIRST.csv';a.click();URL.revokeObjectURL(a.href);
-}
-function saveNewsDraft(){
- const data={title:newsTitle.value,text:newsText.value};localStorage.setItem(KEY+'news',JSON.stringify(data));newsMsg.textContent='Local draft saved in this browser. Not published.'; 
-}
-function downloadNews(){
- const data={title:newsTitle.value,text:newsText.value};if(!data.title&&!data.text){alert('Enter news text first.');return}
- const blob=new Blob([data.title+'\n\n'+data.text],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='HH_NEWS_IMPROVEMENT_DRAFT.txt';a.click();URL.revokeObjectURL(a.href);
-}
-function clearVideoForm(){editingVideo=-1;vidcat.value='ECHS VIDEO LIBRARY';vidtitle.value='';vidno.value='';vidurl.value='';viddesc.value=''}
-function saveVideo(){
- if(!vidtitle.value.trim()){alert('Enter a video title.');return}
- const v={category:vidcat.value,title:vidtitle.value.trim(),number:vidno.value.trim(),url:vidurl.value.trim(),description:viddesc.value.trim()};
- if(editingVideo>=0)videos[editingVideo]=v;else videos.push(v);
- persist();renderVideos();clearVideoForm();
-}
-function editVideo(i){const v=videos[i];editingVideo=i;vidcat.value=v.category;vidtitle.value=v.title;vidno.value=v.number;vidurl.value=v.url;viddesc.value=v.description;window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}
-function deleteVideo(i){if(confirm('Remove this entry from the local admin draft list only? The public website and YouTube are not changed.')){videos.splice(i,1);persist();renderVideos()}}
-function renderVideos(){videoList.innerHTML=videos.map((v,i)=>`<div class="item"><strong>${esc(v.number)} · ${esc(v.title)}</strong><p>${esc(v.category)} · ${esc(v.description)}</p><p>${esc(v.url)}</p><div class="actions"><button class="secondary" onclick="editVideo(${i})">Edit</button><button class="danger" onclick="deleteVideo(${i})">Delete draft entry</button></div></div>`).join('')||'<p class="small">No video draft entries yet. Add an entry above to begin a local management list.</p>'}
-(function init(){const n=JSON.parse(localStorage.getItem(KEY+'news')||'null');if(n){newsTitle.value=n.title;newsText.value=n.text;newsMsg.textContent='A local news draft is available in this browser.'}renderFeedback();renderVideos()})();
-</script></body></html>
+const $=id=>document.getElementById(id);
+let originalText='',workingDoc=null,videoEdit=null,ssEdit=null,pdfCards=[];
+const enabledIds=['downloadSite','resetAll','categorySelect','categoryName','addCategory','renameCategory','videoNumber','videoTitle','videoUrl','saveVideo','clearVideo','ssNumber','ssTitle','ssUrl','addSSVideo','clearSSVideo','pdfTitle','pdfName','pdfFile','addPdf','replacePdf'];
+function enableEditor(on){enabledIds.forEach(id=>$(id).disabled=!on)}
+function safeText(el){return (el?.textContent||'').trim()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function validYouTube(u){try{const x=new URL(u);return ['youtu.be','www.youtube.com','youtube.com','m.youtube.com'].includes(x.hostname)}catch{return false}}
+function section(id){return workingDoc?.getElementById(id)}
+function getCategories(){return [...section('hh-video-library').querySelectorAll('details.hh-video-topic')].map((el,i)=>({el,name:safeText(el.querySelector('summary span:nth-child(2)'))||'Untitled category',number:safeText(el.querySelector('.hh-topic-number'))||String(i+1).padStart(2,'0')}))}
+function selectedCategory(){return getCategories().find(c=>c.name===$('categorySelect').value)}
+function renderCategories(){const cats=getCategories();$('categorySelect').innerHTML=cats.map(c=>'<option>'+esc(c.name)+'</option>').join('');renderVideos()}
+function renderVideos(){const c=selectedCategory();if(!c){$('videoList').innerHTML='<p class="small">No categories found.</p>';return}
+const rows=[...c.el.querySelectorAll('.hh-video-row')];$('videoList').innerHTML=rows.map((r,i)=>{const n=safeText(r.querySelector('.hh-video-number')),t=safeText(r.querySelector('.hh-video-description')),a=r.querySelector('a.hh-watch-link');return '<div class="item"><strong>'+esc(n)+' · '+esc(t)+'</strong><div class="meta">'+esc(a?.href||'')+'</div><div class="actions"><button class="secondary" data-edit-video="'+i+'">Edit</button><button class="danger" data-delete-video="'+i+'">Delete</button></div></div>'}).join('')||'<p class="small">No videos in this category yet.</p>'}
+function makeRow(n,t,u){const row=workingDoc.createElement('div');row.className='hh-video-row';const a=workingDoc.createElement('a');a.className='hh-watch-link';a.href=u;a.target='_blank';a.rel='noopener noreferrer';a.textContent='WATCH VIDEO ↗';const num=workingDoc.createElement('span');num.className='hh-video-number';num.textContent=n;const title=workingDoc.createElement('span');title.className='hh-video-description';title.textContent=t;row.append(num,title,a);return row}
+function clearVideo(){videoEdit=null;$('videoNumber').value='';$('videoTitle').value='';$('videoUrl').value='';$('saveVideo').textContent='Add Video to Selected Category'}
+function saveVideo(){const c=selectedCategory(),n=$('videoNumber').value.trim(),t=$('videoTitle').value.trim(),u=$('videoUrl').value.trim();if(!c||!n||!t||!validYouTube(u)){alert('Enter video number, title and a valid YouTube URL.');return}const rows=[...c.el.querySelectorAll('.hh-video-row')];if(videoEdit!==null&&rows[videoEdit])rows[videoEdit].replaceWith(makeRow(n,t,u));else c.el.querySelector('.hh-video-list').append(makeRow(n,t,u));clearVideo();renderVideos()}
+$('videoList').addEventListener('click',e=>{const ed=e.target.closest('[data-edit-video]'),del=e.target.closest('[data-delete-video]');if(!ed&&!del)return;const c=selectedCategory(),rows=[...c.el.querySelectorAll('.hh-video-row')],i=Number((ed||del).dataset[ed?'editVideo':'deleteVideo']),r=rows[i];if(ed){$('videoNumber').value=safeText(r.querySelector('.hh-video-number'));$('videoTitle').value=safeText(r.querySelector('.hh-video-description'));$('videoUrl').value=r.querySelector('a')?.href||'';videoEdit=i;$('saveVideo').textContent='Save Video Changes'}else if(confirm('Delete this video entry from the working website file?')){r.remove();renderVideos()}});
+$('categorySelect').addEventListener('change',()=>{clearVideo();renderVideos()});
+$('addCategory').onclick=()=>{const name=$('categoryName').value.trim();if(!name){alert('Enter a category name.');return}if(getCategories().some(c=>c.name.toLowerCase()===name.toLowerCase())){alert('This category already exists. Duplicate category names are not allowed.');return}const lib=section('hh-video-library'),topic=workingDoc.createElement('details');topic.className='hh-video-topic';const summary=workingDoc.createElement('summary');const no=workingDoc.createElement('span');no.className='hh-topic-number';no.textContent=String(getCategories().length+1).padStart(2,'0');const label=workingDoc.createElement('span');label.textContent=name;const toggle=workingDoc.createElement('span');toggle.className='hh-toggle';toggle.setAttribute('aria-hidden','true');toggle.textContent='+';summary.append(no,label,toggle);const list=workingDoc.createElement('div');list.className='hh-video-list';topic.append(summary,list);lib.querySelector('.hh-video-topics').append(topic);$('categoryName').value='';renderCategories();$('categorySelect').value=name;renderVideos()};
+$('renameCategory').onclick=()=>{const c=selectedCategory(),name=$('categoryName').value.trim();if(!c||!name){alert('Select a category and enter its new name.');return}if(getCategories().some(x=>x!==c&&x.name.toLowerCase()===name.toLowerCase())){alert('This category name already exists.');return}c.el.querySelector('summary span:nth-child(2)').textContent=name;$('categoryName').value='';renderCategories();$('categorySelect').value=name};
+$('saveVideo').onclick=saveVideo;$('clearVideo').onclick=clearVideo;
+function getSSVideos(){return [...section('hh-situation-solution').querySelectorAll('.hh-situation-video')]}
+function renderSS(){const list=getSSVideos();$('ssVideoList').innerHTML=list.map((el,i)=>'<div class="item"><strong>'+esc(safeText(el.querySelector('.hh-video-number')))+' · '+esc(safeText(el.querySelector('h4')) )+'</strong><div class="meta">'+esc(el.querySelector('a')?.href||'')+'</div><div class="actions"><button class="secondary" data-ss-edit="'+i+'">Edit</button><button class="danger" data-ss-delete="'+i+'">Delete</button></div></div>').join('')||'<p class="small">No Situation–Solution videos.</p>'}
+function makeSS(n,t,u){const box=workingDoc.createElement('div');box.className='hh-situation-video';const no=workingDoc.createElement('div');no.className='hh-video-number';no.textContent=n;const head=workingDoc.createElement('div');head.className='hh-situation-video-heading';const h=workingDoc.createElement('h4');h.textContent=t;const a=workingDoc.createElement('a');a.className='hh-watch-link';a.href=u;a.target='_blank';a.rel='noopener noreferrer';a.textContent='WATCH VIDEO ↗';head.append(h,a);box.append(no,head);return box}
+function clearSS(){ssEdit=null;$('ssNumber').value='';$('ssTitle').value='';$('ssUrl').value='';$('addSSVideo').textContent='Add Situation–Solution Video'}
+$('ssVideoList').addEventListener('click',e=>{const ed=e.target.closest('[data-ss-edit]'),del=e.target.closest('[data-ss-delete]');if(!ed&&!del)return;const all=getSSVideos(),i=Number((ed||del).dataset[ed?'ssEdit':'ssDelete']),el=all[i];if(ed){$('ssNumber').value=safeText(el.querySelector('.hh-video-number'));$('ssTitle').value=safeText(el.querySelector('h4'));$('ssUrl').value=el.querySelector('a')?.href||'';ssEdit=i;$('addSSVideo').textContent='Save Video Changes'}else if(confirm('Delete this Situation–Solution video entry?')){el.remove();renderSS()}});
+$('addSSVideo').onclick=()=>{const n=$('ssNumber').value.trim(),t=$('ssTitle').value.trim(),u=$('ssUrl').value.trim();if(!n||!t||!validYouTube(u)){alert('Enter video number, title and a valid YouTube URL.');return}const all=getSSVideos();if(ssEdit!==null&&all[ssEdit])all[ssEdit].replaceWith(makeSS(n,t,u));else section('hh-situation-solution').querySelector('.hh-situation-item').prepend(makeSS(n,t,u));clearSS();renderSS()};
+$('clearSSVideo').onclick=clearSS;
+function getPdfEls(){return [...section('hh-situation-solution').querySelectorAll('.hh-situation-pdf')]}
+function renderPdfs(){const els=getPdfEls();$('pdfList').innerHTML=els.map((el,i)=>'<div class="item"><strong>'+esc(safeText(el.querySelector('h4')) )+'</strong><div class="meta">'+esc(el.querySelector('a')?.getAttribute('href')||'')+'</div></div>').join('')||'<p class="small">No PDF cards.</p>'}
+function normalisePdfCards(){getPdfEls().forEach((el,i)=>{const h=el.querySelector('h4');if(i===0&&h)h.textContent='YOUR SITUATION – MY VIDEO SOLUTION';el.querySelectorAll('p').forEach(p=>p.remove());const a=el.querySelector('a');if(a){a.textContent='OPEN PDF GUIDE ↗';a.target='_blank';a.rel='noopener noreferrer'}});renderPdfs()}
+function downloadPdf(){const f=$('pdfFile').files[0];if(!f||f.type!=='application/pdf'){alert('Select a PDF file first.');return false}const name=$('pdfName').value.trim();if(!name||name.includes('/')||!name.toLowerCase().endsWith('.pdf')){alert('Enter a valid PDF filename ending in .pdf.');return false}const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);return true}
+$('addPdf').onclick=()=>{const title=$('pdfTitle').value.trim(),name=$('pdfName').value.trim();if(!title||!name||!name.toLowerCase().endsWith('.pdf')){alert('Enter PDF title and filename.');return}const box=workingDoc.createElement('div');box.className='hh-situation-pdf';const h=workingDoc.createElement('h4');h.textContent=title;const a=workingDoc.createElement('a');a.className='hh-watch-link';a.href=name;a.target='_blank';a.rel='noopener noreferrer';a.textContent='OPEN PDF GUIDE ↗';box.append(h,a);section('hh-situation-solution').querySelector('.hh-situation-item').append(box);normalisePdfCards();downloadPdf()};
+$('replacePdf').onclick=()=>{if(!getPdfEls().length){alert('No existing PDF card. Use Add PDF Card first.');return}const name=$('pdfName').value.trim();if(!name||!name.toLowerCase().endsWith('.pdf')){alert('Enter a valid PDF filename.');return}const f=$('pdfFile').files[0];if(!f||f.type!=='application/pdf'){alert('Select the replacement PDF file first.');return}getPdfEls()[0].querySelector('a').href=name;normalisePdfCards();downloadPdf()};
+function serialize(){const html='<!doctype html>\n'+workingDoc.documentElement.outerHTML;const blob=new Blob([html],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='index.html';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+$('downloadSite').onclick=()=>{normalisePdfCards();serialize();$('loadStatus').textContent='Updated index.html downloaded. Upload this file and any downloaded PDF file to the Dev working branch.'};
+$('resetAll').onclick=()=>{if(!confirm('Discard all unsaved changes and reload the original index.html file?'))return;loadText(originalText)};
+function loadText(text){originalText=text;const parser=new DOMParser();workingDoc=parser.parseFromString(text,'text/html');if(!section('hh-video-library')||!section('hh-situation-solution')){workingDoc=null;enableEditor(false);$('loadStatus').textContent='This file does not contain the expected Video Library and Situation–Solution sections.';return}enableEditor(true);clearVideo();clearSS();renderCategories();renderSS();normalisePdfCards();$('loadStatus').textContent='Loaded successfully. '+getCategories().length+' categories, '+workingDoc.querySelectorAll('#hh-video-library .hh-video-row').length+' Video Library entries and '+getSSVideos().length+' Situation–Solution videos found.'}
+$('siteFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;loadText(await file.text())});
+</script>
+</body></html>
