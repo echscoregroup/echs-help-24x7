@@ -21,3 +21,7 @@ PRESERVATION
 - This is a local review copy only.
 
 PDF GUIDE: SITUATION_SOLUTION_GUIDE.pdf is stored in the same folder as index.html. Keep both files together after extraction.
+
+
+VERSION 1.0.2 LOCAL REVIEW CANDIDATE
+Open index.html for beneficiary view or admin.html for administrator view. Both use the same local index.html.
