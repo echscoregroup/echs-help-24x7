@@ -1,0 +1,37 @@
+HELPING HANDS FOR ECHS
+USER-FACING BUILD RECORD
+
+Build name: HH-WEBSITE-USER-FACING-1.0
+Repository: echscoregroup/ECHSHELP
+Branch: main
+Date: 05 November 2026
+
+BUILD MAPPING
+Corresponding admin-facing build: HH-WEBSITE-ADMIN-FACING-1.0.3
+Admin-facing repository: echscoregroup/echs-help-24x7
+Admin-facing branch: HH-WEBSITE-ADMIN-FACING-1.0.3
+Admin-facing recorded commit: 239e78b8668bcd162c8292ffee72583ba780a1e2
+
+PRODUCTION SOURCE BASELINE
+Original index.html blob SHA before this change: 867fffdd5a3cc23eba6f93619d109fb8287e5fa5
+
+USER-FACING BUILD CHANGE
+1. Search input is disabled.
+2. Search button is disabled.
+3. Search control is greyed out.
+4. Placeholder message is "Under Development".
+5. Build identifier is recorded in index.html:
+   <meta name="hh-build" content="HH-WEBSITE-USER-FACING-1.0">
+
+SCOPE CONTROL
+The existing ECHSHELP/main website content was retained.
+Only the Search form, its disabled-state styling, and the build identifier were changed in index.html.
+No other website content or functionality was intentionally changed.
+
+INDEX BUILD COMMIT
+Commit SHA: 383a73d8d06cfa75d0f3c4de73afae471cb6ef39
+index.html blob SHA after change: 8895c1fa9e423f8db0bf8ac86493271a939742e3
+
+RELEASE STATUS
+This is the user-facing 1.0 candidate for owner testing.
+Do not treat as finally approved for launch until the owner completes website testing and gives launch approval.
