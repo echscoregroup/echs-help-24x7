@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="hh-build" content="1.0.3">
+<meta name="hh-build" content="1.0.4">
 <title>Helping Hands for ECHS | News, Videos, Policy Letters & Situation–Solution</title>
 <meta name="description" content="Helping Hands for ECHS provides ECHS beneficiaries and families with practical ECHS videos, policy letters, latest updates, FAQs, guides and instant help.">
 <meta name="keywords" content="ECHS, ECHS beneficiaries, ECHS policy letters, ECHS news, ECHS videos, ECHS help, ex-servicemen healthcare">
@@ -127,20 +127,34 @@ footer{background:var(--navy);color:#fff;padding:25px 5%;display:flex;justify-co
 .hh-admin-actions button.secondary{background:#667586}
 #hh-admin-status{font-size:12px;font-weight:700;color:var(--teal);margin:10px 0 0}
 @media(max-width:600px){.hh-admin-grid{grid-template-columns:1fr}}
+
+#hh-situation-admin-toggle{margin:0 0 14px;padding:9px 14px;border:1px solid var(--gold);border-radius:8px;background:var(--navy);color:#fff;font-weight:800;cursor:pointer}
+#hh-situation-admin{display:none;margin:0 0 18px;padding:16px;border:1px solid var(--gold);border-radius:10px;background:#fff}
+#hh-situation-admin.open{display:block}
+#hh-situation-admin h4{margin:0 0 12px;color:var(--navy)}
+#hh-situation-admin .hh-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#hh-situation-admin label{display:block;font-size:12px;font-weight:800;color:var(--navy)}
+#hh-situation-admin input,#hh-situation-admin select{width:100%;margin-top:4px;padding:9px;border:1px solid #cbd3dc;border-radius:6px;font:inherit;background:#fff;color:#172536}
+#hh-situation-admin .hh-admin-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#hh-situation-admin button.action{padding:9px 14px;border:0;border-radius:6px;background:var(--navy);color:#fff;font-weight:800;cursor:pointer}
+#hh-situation-admin button.secondary{background:#667586}
+#hh-situation-admin-status{font-size:12px;font-weight:700;color:var(--teal);margin:10px 0 0}
+@media(max-width:600px){#hh-situation-admin .hh-admin-grid{grid-template-columns:1fr}}
+
 </style>
 <button id="hh-video-admin-toggle" type="button" aria-expanded="false">VIDEO LIBRARY ADMIN — OPEN</button>
 <div id="hh-video-admin" aria-label="Video Library administration">
- <h4>MANAGE VIDEOS</h4>
+ <h4>MANAGE VIDEOS &amp; CATEGORIES</h4>
  <div class="hh-admin-grid">
-  <label>Action<select id="hh-admin-action"><option value="add">ADD VIDEO</option><option value="category">CREATE CATEGORY + FIRST VIDEO</option><option value="edit">EDIT VIDEO</option><option value="delete">DELETE VIDEO</option></select></label>
+  <label>Action<select id="hh-admin-action"><option value="add">ADD VIDEO</option><option value="edit">EDIT VIDEO</option><option value="delete">DELETE VIDEO</option><option value="category">CREATE CATEGORY + FIRST VIDEO</option><option value="editcategory">EDIT CATEGORY NAME</option></select></label>
   <label id="hh-admin-category-wrap">Category<select id="hh-admin-category"></select></label>
+  <label id="hh-admin-category-name-wrap" style="display:none">New category name<input id="hh-admin-category-name" placeholder="Enter new category name"></label>
+  <label id="hh-admin-category-position-wrap" style="display:none">New category position<select id="hh-admin-category-position"><option value="first">FIRST</option><option value="last">LAST</option><option value="after">AFTER SELECTED CATEGORY</option></select></label>
+  <label id="hh-admin-category-after-wrap" style="display:none">Insert after category<select id="hh-admin-category-after"></select></label>
   <label id="hh-admin-existing-wrap" style="display:none">Select existing video<select id="hh-admin-existing"></select></label>
-  <label id="hh-admin-position-wrap">Video position<select id="hh-admin-position"><option value="first">FIRST</option><option value="last">LAST</option><option value="after">AFTER SELECTED VIDEO</option></select></label>
-  <label id="hh-admin-after-wrap" style="display:none">Insert after video<select id="hh-admin-after"></select></label>
-  <label id="hh-admin-new-category-wrap" style="display:none">New category name<input id="hh-admin-new-category" placeholder="AYUSH"></label>
-  <label id="hh-admin-category-position-wrap" style="display:none">New category position<select id="hh-admin-category-position"><option value="first">FIRST — CATEGORY 01</option><option value="last">LAST</option><option value="after">CUSTOM — AFTER SELECTED CATEGORY</option></select></label>
-  <label id="hh-admin-category-after-wrap" style="display:none">Insert category after<select id="hh-admin-category-after"></select></label>
-  <label>Video number<input id="hh-admin-number" placeholder="V 63"></label>
+  <label>Position<select id="hh-admin-position"><option value="first">FIRST</option><option value="last">LAST</option><option value="after">AFTER SELECTED VIDEO</option></select></label>
+  <label id="hh-admin-after-wrap" style="display:none">Insert after<select id="hh-admin-after"></select></label>
+  <label>Video number (format V 63)<input id="hh-admin-number" placeholder=""></label>
   <label>Display title<input id="hh-admin-title" placeholder="Video title"></label>
   <label>Video URL<input id="hh-admin-url" type="url" placeholder="https://youtu.be/..."></label>
  </div>
@@ -151,8 +165,8 @@ footer{background:var(--navy);color:#fff;padding:25px 5%;display:flex;justify-co
 document.addEventListener('DOMContentLoaded',function(){
  const section=document.getElementById('hh-video-library'); if(!section)return;
  const storeKey='hh_video_library_pilot_104';
- const topicHost=section.querySelector('.hh-video-topics');
- const topics=()=>Array.from(topicHost.querySelectorAll('.hh-video-topic'));
+ const topicContainer=section.querySelector('.hh-video-topics');
+ const topics=()=>Array.from(topicContainer?.querySelectorAll('.hh-video-topic')||[]);
  const topicName=t=>t.querySelector('summary span:nth-child(2)')?.textContent.trim()||'';
  const readRows=t=>Array.from(t.querySelectorAll('.hh-video-row')).map(row=>({
   number:row.querySelector('.hh-video-number')?.textContent.trim()||'',
@@ -164,10 +178,11 @@ document.addEventListener('DOMContentLoaded',function(){
  if(!Array.isArray(data)){
   data=topics().map(t=>({category:topicName(t),rows:readRows(t)}));
  }
- const $=id=>document.getElementById(id);
  const persist=()=>{
-  try{localStorage.setItem(storeKey,JSON.stringify(data));return {ok:true};}
-  catch(error){
+  try{
+   localStorage.setItem(storeKey,JSON.stringify(data));
+   return {ok:true};
+  }catch(error){
    console.error('HH Video Admin storage error:',error);
    return {ok:false,message:error&&error.name==='QuotaExceededError'?'Browser storage is full. Changes are shown only until this page is closed.':'Browser storage is unavailable for this local file. Changes are shown only until this page is closed.'};
   }
@@ -176,26 +191,28 @@ document.addEventListener('DOMContentLoaded',function(){
  const clearStatus=()=>setStatus('Ready. No changes saved yet.');
  const snapshot=rows=>JSON.stringify(rows);
  function render(){
-  topicHost.replaceChildren();
-  data.forEach((category,i)=>{
+  if(!topicContainer)return;
+  topicContainer.replaceChildren();
+  data.forEach((item,i)=>{
    const details=document.createElement('details');details.className='hh-video-topic';
    const summary=document.createElement('summary');
    const number=document.createElement('span');number.className='hh-topic-number';number.textContent=String(i+1).padStart(2,'0');
-   const name=document.createElement('span');name.textContent=category.category;
+   const name=document.createElement('span');name.textContent=item.category;
    const toggle=document.createElement('span');toggle.className='hh-toggle';toggle.setAttribute('aria-hidden','true');toggle.textContent='+';
    summary.append(number,name,toggle);
    const list=document.createElement('div');list.className='hh-video-list';
-   (category.rows||[]).forEach(item=>{
+   (item.rows||[]).forEach(video=>{
     const row=document.createElement('div');row.className='hh-video-row';
-    const n=document.createElement('span');n.className='hh-video-number';n.textContent=item.number;
-    const d=document.createElement('span');d.className='hh-video-description';d.textContent=item.title;
-    const a=document.createElement('a');a.className='hh-watch-link';a.href=item.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='WATCH VIDEO ↗';
+    const n=document.createElement('span');n.className='hh-video-number';n.textContent=video.number;
+    const d=document.createElement('span');d.className='hh-video-description';d.textContent=video.title;
+    const a=document.createElement('a');a.className='hh-watch-link';a.href=video.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='WATCH VIDEO ↗';
     row.append(n,d,a);list.append(row);
    });
-   details.append(summary,list);topicHost.append(details);
+   details.append(summary,list);topicContainer.append(details);
   });
   fillSelects();
  }
+ const $=id=>document.getElementById(id);
  function fillSelects(){
   const cat=$('hh-admin-category'),old=cat.value;cat.replaceChildren();
   data.forEach((d,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=d.category;cat.append(o)});
@@ -206,106 +223,135 @@ document.addEventListener('DOMContentLoaded',function(){
    rows.forEach((r,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=r.number+' — '+r.title;el.append(o)});
    if(prev&&Number(prev)<rows.length)el.value=prev;
   });
-  const categoryAfter=$('hh-admin-category-after'),prevCategory=categoryAfter.value;categoryAfter.replaceChildren();
-  data.forEach((d,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=String(i+1).padStart(2,'0')+' — '+d.category;categoryAfter.append(o)});
-  if(prevCategory&&Number(prevCategory)<data.length)categoryAfter.value=prevCategory;
+  const afterCategory=$('hh-admin-category-after'),previous=afterCategory.value;afterCategory.replaceChildren();
+  data.forEach((d,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=d.category;afterCategory.append(o)});
+  if(previous&&Number(previous)<data.length)afterCategory.value=previous;
   updateAction();
  }
  function updateAction(){
-  const action=$('hh-admin-action').value,isCategory=action==='category',isAdd=action==='add',isEdit=action==='edit',isDelete=action==='delete';
+  const action=$('hh-admin-action').value,edit=action==='edit'||action==='delete',isCategory=action==='category',isEditCategory=action==='editcategory';
+  $('hh-admin-existing-wrap').style.display=edit?'block':'none';
   $('hh-admin-category-wrap').style.display=isCategory?'none':'block';
-  $('hh-admin-existing-wrap').style.display=isEdit||isDelete?'block':'none';
-  $('hh-admin-position-wrap').style.display=isAdd?'block':'none';
-  $('hh-admin-after-wrap').style.display=isAdd&&$('hh-admin-position').value==='after'?'block':'none';
-  $('hh-admin-new-category-wrap').style.display=isCategory?'block':'none';
+  $('hh-admin-category-name-wrap').style.display=(isCategory||isEditCategory)?'block':'none';
+  $('hh-admin-category-name-wrap').firstChild.textContent=isEditCategory?'Correct category name':'New category name';
+  $('hh-admin-category-name').placeholder=isEditCategory?'Enter corrected category name':'Enter new category name';
   $('hh-admin-category-position-wrap').style.display=isCategory?'block':'none';
   $('hh-admin-category-after-wrap').style.display=isCategory&&$('hh-admin-category-position').value==='after'?'block':'none';
-  $('hh-admin-number').disabled=isDelete;$('hh-admin-title').disabled=isDelete;$('hh-admin-url').disabled=isDelete;
+  if(isEditCategory){$('hh-admin-category-name').value=data[Number($('hh-admin-category').value)]?.category||'';} else if(!isCategory){$('hh-admin-category-name').value='';}
+  $('hh-admin-number').disabled=action==='delete';$('hh-admin-title').disabled=action==='delete';$('hh-admin-url').disabled=action==='delete';
+  // DELETE: the selected-video dropdown identifies the record; keep detail fields visibly empty.
+  if(action==='delete'){$('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';$('hh-admin-number').placeholder='';}
+  else {$('hh-admin-number').placeholder='';}
+  $('hh-admin-position').disabled=action!=='add';
+  $('hh-admin-position').parentElement.style.display=action==='add'?'block':'none';
+  $('hh-admin-number').parentElement.firstChild.textContent='Video number (format V 63)';
+  $('hh-admin-title').parentElement.firstChild.textContent='Video Title';
+  $('hh-admin-url').parentElement.firstChild.textContent='Video URL';
   const row=data[Number($('hh-admin-category').value)]?.rows[Number($('hh-admin-existing').value)];
-  if(isEdit&&row){$('hh-admin-number').value=row.number;$('hh-admin-title').value=row.title;$('hh-admin-url').value=row.url;}
+  if(action==='edit'&&row){$('hh-admin-number').value=row.number;$('hh-admin-title').value=row.title;$('hh-admin-url').value=row.url;}
  }
  $('hh-video-admin-toggle').addEventListener('click',()=>{
   const panel=$('hh-video-admin'),open=!panel.classList.contains('open');panel.classList.toggle('open',open);
   $('hh-video-admin-toggle').textContent=open?'VIDEO LIBRARY ADMIN — CLOSE':'VIDEO LIBRARY ADMIN — OPEN';
   $('hh-video-admin-toggle').setAttribute('aria-expanded',String(open));
  });
- ['hh-admin-action','hh-admin-category','hh-admin-existing','hh-admin-position','hh-admin-category-position'].forEach(id=>$(id).addEventListener('change',()=>{
-  if(id==='hh-admin-category')fillSelects();else updateAction();clearStatus();
- }));
- ['hh-admin-number','hh-admin-title','hh-admin-url','hh-admin-new-category'].forEach(id=>$(id).addEventListener('input',clearStatus));
- $('hh-admin-cancel').addEventListener('click',()=>{
-  ['hh-admin-number','hh-admin-title','hh-admin-url','hh-admin-new-category'].forEach(id=>$(id).value='');
-  clearStatus();
- });
+ ['hh-admin-action','hh-admin-category','hh-admin-existing','hh-admin-position','hh-admin-category-position'].forEach(id=>$(id).addEventListener('change',()=>{if(id==='hh-admin-category')fillSelects();else updateAction();clearStatus();}));
+ ['hh-admin-number','hh-admin-title','hh-admin-url','hh-admin-category-name'].forEach(id=>$(id).addEventListener('input',clearStatus));
+ $('hh-admin-cancel').addEventListener('click',()=>{$('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';clearStatus();});
  $('hh-admin-save').addEventListener('click',()=>{
   const action=$('hh-admin-action').value;
-  if(action==='category'){
-   const name=$('hh-admin-new-category').value.trim();
+  const ci=Number($('hh-admin-category').value);
+  const category=data[ci];
+  if(action!=='category'&&(!category||!Array.isArray(category.rows))){setStatus('ERROR: Select a valid category.');return;}
+  const rows=category?.rows||[];
+  if(action==='editcategory'){
+   const correctedName=$('hh-admin-category-name').value.trim();
+   if(!correctedName){setStatus('ERROR: Enter the corrected category name.');return;}
+   if(data.some((d,i)=>i!==ci&&d.category.toLowerCase()===correctedName.toLowerCase())){setStatus('ERROR: This category name already exists.');return;}
+   category.category=correctedName;
+  }else if(action==='category'){
+   const categoryName=$('hh-admin-category-name').value.trim();
    const item={number:$('hh-admin-number').value.trim(),title:$('hh-admin-title').value.trim(),url:$('hh-admin-url').value.trim()};
-   if(!name){setStatus('ERROR: Enter the new category name.');return;}
-   if(data.some(d=>d.category.toLocaleLowerCase()===name.toLocaleLowerCase())){setStatus('ERROR: This category already exists. No change made.');return;}
-   if(!item.number||!item.title||!/^https:\/\//i.test(item.url)){setStatus('ERROR: Enter the first video number, title and a valid https URL.');return;}
-   const pos=$('hh-admin-category-position').value;let at=0;
-   if(pos==='last')at=data.length;
-   if(pos==='after'){
-    const selected=Number($('hh-admin-category-after').value);
-    if(!Number.isInteger(selected)||!data[selected]){setStatus('ERROR: Select the category to insert after.');return;}
-    at=selected+1;
+   if(!categoryName){setStatus('ERROR: Enter a category name.');return;}
+   if(data.some(d=>d.category.toLowerCase()===categoryName.toLowerCase())){setStatus('ERROR: This category already exists.');return;}
+   if(!item.number||!item.title||!/^https:\/\//i.test(item.url)){setStatus('ERROR: Enter first video number, title and a valid https URL.');return;}
+   const position=$('hh-admin-category-position').value;let at=0;
+   if(position==='last')at=data.length;
+   if(position==='after'){
+    const selectedIndex=Number($('hh-admin-category-after').value);
+    if(!Number.isInteger(selectedIndex)||!data[selectedIndex]){setStatus('ERROR: Select the category to insert after.');return;}
+    at=selectedIndex+1;
    }
-   const before=JSON.stringify(data);
-   data.splice(at,0,{category:name,rows:[item]});
-   if(data.length!==JSON.parse(before).length+1||data[at]?.category!==name||data[at]?.rows?.[0]!==item){
-    data=JSON.parse(before);setStatus('ERROR: Category insertion verification failed. No change saved.');return;
+   data.splice(at,0,{category:categoryName,rows:[item]});
+  }else if(action==='add'){
+   const item={number:$('hh-admin-number').value.trim(),title:$('hh-admin-title').value.trim(),url:$('hh-admin-url').value.trim()};
+   if(!item.number||!item.title||!/^https:\/\//i.test(item.url)){setStatus('ERROR: Enter video number, title and a valid https URL.');return;}
+   const pos=$('hh-admin-position').value;
+   let at=0;
+   if(pos==='last')at=rows.length;
+   if(pos==='after'){
+    const selected=$('hh-admin-after').selectedOptions[0];
+    if(!selected){setStatus('ERROR: Select the video to insert after.');return;}
+    const selectedText=selected.textContent;
+    const selectedNumber=selectedText.split(' — ')[0].trim();
+    const ix=rows.findIndex(r=>r.number===selectedNumber);
+    if(ix<0){setStatus('ERROR: The selected reference video was not found. No change made.');return;}
+    at=ix+1;
+   }
+   const before=snapshot(rows);
+   rows.splice(at,0,item);
+   if(rows.length!==JSON.parse(before).length+1||rows[at]!==item){
+    category.rows=JSON.parse(before);
+    setStatus('ERROR: Insert verification failed. No change saved.');
+    return;
    }
   }else{
-   const ci=Number($('hh-admin-category').value),category=data[ci];
-   if(!category||!Array.isArray(category.rows)){setStatus('ERROR: Select a valid category.');return;}
-   const rows=category.rows;
-   if(action==='add'){
+   const ix=Number($('hh-admin-existing').value);
+   if(!Number.isInteger(ix)||!rows[ix]){setStatus('ERROR: Select an existing video.');return;}
+   if(action==='delete'){
+    if(!confirm('Delete '+rows[ix].number+' — '+rows[ix].title+'?'))return;
+    rows.splice(ix,1);
+   }else if(action==='edit'){
     const item={number:$('hh-admin-number').value.trim(),title:$('hh-admin-title').value.trim(),url:$('hh-admin-url').value.trim()};
     if(!item.number||!item.title||!/^https:\/\//i.test(item.url)){setStatus('ERROR: Enter video number, title and a valid https URL.');return;}
-    const pos=$('hh-admin-position').value;let at=0;
-    if(pos==='last')at=rows.length;
-    if(pos==='after'){
-     const selected=$('hh-admin-after').selectedOptions[0];
-     if(!selected){setStatus('ERROR: Select the video to insert after.');return;}
-     const selectedNumber=selected.textContent.split(' — ')[0].trim();
-     const ix=rows.findIndex(r=>r.number===selectedNumber);
-     if(ix<0){setStatus('ERROR: The selected reference video was not found. No change made.');return;}
-     at=ix+1;
-    }
-    const before=snapshot(rows);rows.splice(at,0,item);
-    if(rows.length!==JSON.parse(before).length+1||rows[at]!==item){category.rows=JSON.parse(before);setStatus('ERROR: Insert verification failed. No change saved.');return;}
-   }else{
-    const ix=Number($('hh-admin-existing').value);
-    if(!Number.isInteger(ix)||!rows[ix]){setStatus('ERROR: Select an existing video.');return;}
-    if(action==='delete'){
-     if(!confirm('Delete '+rows[ix].number+' — '+rows[ix].title+'?'))return;
-     rows.splice(ix,1);
-    }else if(action==='edit'){
-     const item={number:$('hh-admin-number').value.trim(),title:$('hh-admin-title').value.trim(),url:$('hh-admin-url').value.trim()};
-     if(!item.number||!item.title||!/^https:\/\//i.test(item.url)){setStatus('ERROR: Enter video number, title and a valid https URL.');return;}
-     rows[ix]=item;
-    }
+    rows[ix]=item;
    }
   }
   const saveResult=persist();
   if(!saveResult.ok){setStatus('ERROR: '+saveResult.message);return;}
   render();
-  ['hh-admin-number','hh-admin-title','hh-admin-url','hh-admin-new-category'].forEach(id=>$(id).value='');
-  setStatus(action==='category'?'SUCCESS: New category and first video saved in this browser.':'SUCCESS: Video change saved in this browser.');
+  $('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';$('hh-admin-category-name').value='';
+  setStatus(action==='category'?'SUCCESS: Category and first video saved in this browser.':action==='editcategory'?'SUCCESS: Category name updated in this browser.':'SUCCESS: Video change saved in this browser.');
  });
  render();
-});</script>
+});
+</script>
 
 <div class="hh-video-topics"><details class="hh-video-topic"><summary><span class="hh-topic-number">01</span><span>ECHS CARD</span><span class="hh-toggle" aria-hidden="true">+</span></summary><div class="hh-video-list"><div class="hh-video-row"><span class="hh-video-number">V 5</span><span class="hh-video-description">64 kB CARD - HOW TO APPLY – REGISTRATION TO RECEIPT OF CARD?</span><a class="hh-watch-link" href="https://youtu.be/bZF3vdlLygY" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 25</span><span class="hh-video-description">HOW TO GET YOUR 64 kB CARD TRANSFERRED TO YOUR NEW RESIDENCE LOCATION / CITY?</span><a class="hh-watch-link" href="https://youtu.be/9YV3R1TdRRc" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 27</span><span class="hh-video-description">HOW TO COMPLETE EMERGENCY APPLICATION FOR 64 kB CARD USING GUEST USER FACILITY?</span><a class="hh-watch-link" href="https://youtu.be/mzWVauCkBCI" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 52</span><span class="hh-video-description">USE OF ON LINE TY SLIP TO GET ECHS SERVICES</span><a class="hh-watch-link" href="https://youtu.be/euKiJJoTbI4" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 71</span><span class="hh-video-description">LOST 64 KB ECHS CARD. DON’T WORRY – SEE THIS VIDEO</span><a class="hh-watch-link" href="https://youtu.be/ruYLIRRx0Ag" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 74</span><span class="hh-video-description">ECHS MEMBERSHIP – SSCO – ECO – PMR &amp; WW II VETERANS &amp; NON PENSIONERS</span><a class="hh-watch-link" href="https://youtu.be/7OQL9L7X_8E" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 87</span><span class="hh-video-description">HOW TO CHANGE DATA ON 64 KB CARD UNDER USE</span><a class="hh-watch-link" href="https://youtu.be/oIEdnMldyWc" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 88</span><span class="hh-video-description">ECHS CARD – ACTIONS ON DEMISE &amp; INELIGIBILITY</span><a class="hh-watch-link" href="https://youtu.be/EHniOlCTlyQ" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 126</span><span class="hh-video-description">END TO END STEPS – CONSOLIDATED POLICY - ANNUAL VALIDATION</span><a class="hh-watch-link" href="https://youtu.be/YrfZ4VsjdV0" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 127</span><span class="hh-video-description">64 KB ECHS CARD IS FAULTY - HOW TO MANAGE THIS SITUATION?</span><a class="hh-watch-link" href="https://youtu.be/-lJvJAFfzAw" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 128</span><span class="hh-video-description">HOW TO CHANGE MOBILE # DURING REGISTRATION TIME</span><a class="hh-watch-link" href="https://youtu.be/1v8rivX_Oz0" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 130</span><span class="hh-video-description">64 KB CARD BLOCKING &amp; UNBLOCKING FEATURES</span><a class="hh-watch-link" href="https://youtu.be/veZRf7_6phs" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V(S) 131</span><span class="hh-video-description">ECHS FACILITIES FOR OFFICER CADETS AVAILABLE</span><a class="hh-watch-link" href="https://youtube.com/shorts/ucAFXE5Lw60" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 141</span><span class="hh-video-description">HOW TO MANAGE FORGOT PASSWORD &amp; ANSWERS TO SECURITY QUESTIONS TO ACCESS ECHS CARD PORTAL</span><a class="hh-watch-link" href="https://youtu.be/0_umUntoDQ0" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 151</span><span class="hh-video-description">64 KB CARD – APPLY IN JUST 40 MINUTES</span><a class="hh-watch-link" href="https://youtu.be/IXhmNHQLuVQ" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 155</span><span class="hh-video-description">64 KB CARD - HOW TO CHANGE MOBILE # OF PRIMARY &amp; DEPENDENT BENEFICIARY</span><a class="hh-watch-link" href="https://youtu.be/975F4Rs8oTc" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 156</span><span class="hh-video-description">WHO ARE ELIGIBLE TO BECOME ECHS MEMBERS? ZERO CONFUSION - TOTAL CLARITY</span><a class="hh-watch-link" href="https://youtu.be/E4UKOMBBlis" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div></div></details><details class="hh-video-topic"><summary><span class="hh-topic-number">02</span><span>MEDICAL TREATMENT AT EMPANELLED HOSPITAL</span><span class="hh-toggle" aria-hidden="true">+</span></summary><div class="hh-video-list"><div class="hh-video-row"><span class="hh-video-number">V 2</span><span class="hh-video-description">HOW TO GET TREATMENT IN EMPANELLED HOSPITAL IN A MEDICAL EMERGENCY?</span><a class="hh-watch-link" href="https://youtu.be/eHrFSMWSUF0" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V (S) 15</span><span class="hh-video-description">HOW TO GET EXTENSION OF STAY WHEN ADMITTED IN AN EMPANELLED HOSPITAL</span><a class="hh-watch-link" href="https://youtube.com/shorts/7zTDKrWSK_I" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V (S) 17</span><span class="hh-video-description">WHAT ACTIONS YOU NEED TO TAKE ON DISCHARGE FROM AN EMPANELLED HOSPITAL</span><a class="hh-watch-link" href="https://youtube.com/shorts/2DU5r1mMRDs" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 35</span><span class="hh-video-description">HOW TO FIND EMPANELLED HOSPITALS ANY CITY – ANYWHERE – ANYTIME?</span><a class="hh-watch-link" href="https://youtu.be/Ru_A2wRMG2A" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 41</span><span class="hh-video-description">SYMPTOMATIC EMERGENCY MEDICAL CONDITION – HOW TO GET DAY CARE TREATMENT IN EH?</span><a class="hh-watch-link" href="https://youtu.be/AudByROr86k" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V(S) 43</span><span class="hh-video-description">DO NOT RUN AROUND FOR UNLISTED PROCEDURE &amp; EXTN OF STAY APPROVAL AT EMPANELLED HOSPITAL</span><a class="hh-watch-link" href="https://youtube.com/shorts/RveeIgXbdXw" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 51</span><span class="hh-video-description">WHEN CAN A BENEFICIARY GET A REFERRAL VALID FOR 06 MONTHS ?</span><a class="hh-watch-link" href="https://youtu.be/8lARyH7tYis" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V – 57</span><span class="hh-video-description">APPX A WHEN NEEDED &amp; NOT NEEDED TO BE INITIATED BY EMPANELLED HOSPITAL</span><a class="hh-watch-link" href="https://youtu.be/BiNtqqx496Q" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 107</span><span class="hh-video-description">GeoTagging BY EMPANELLED HOSPITAL &amp; WHAT ECHS BENEFICIARY NEED TO KNOW</span><a class="hh-watch-link" href="https://youtu.be/6ta8RjUD_sU" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 123</span><span class="hh-video-description">70 + &amp; BELOW 70 YEARS – HOW TO GET OPD TREATMENT AT EMPANELLED HOSPITAL</span><a class="hh-watch-link" href="https://youtu.be/qMRlTqc4tMo" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 133</span><span class="hh-video-description">REIMBURSEMENT OF PAYMENT MADE TO EMPANELLED HOSPITAL</span><a class="hh-watch-link" href="https://youtu.be/nFnVbtL2Mxk" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 139</span><span class="hh-video-description">CANCER TREATMENT MEDICINES FROM ECHS</span><a class="hh-watch-link" href="https://youtu.be/jy9z3BxIZ04" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 143</span><span class="hh-video-description">MASTER GUIDE - REFERRALS TO EMPANELLED HOSPITAL</span><a class="hh-watch-link" href="https://youtu.be/u1pFKamZ8LE" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 152</span><span class="hh-video-description">DENTAL TREATMENT AT ECHS</span><a class="hh-watch-link" href="https://youtu.be/TeI4vO3KSvI" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div></div></details><details class="hh-video-topic"><summary><span class="hh-topic-number">03</span><span>MEDICAL TREATMENT AT SERVICE HOSPITAL (AFMS)</span><span class="hh-toggle" aria-hidden="true">+</span></summary><div class="hh-video-list"><div class="hh-video-row"><span class="hh-video-number">V42</span><span class="hh-video-description">WHO IS ELIGIBLE TO GET TREATMENT AT AFMS HOSPITAL?</span><a class="hh-watch-link" href="https://youtu.be/4B6rRqp-sVI" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 48</span><span class="hh-video-description">TREATMENT AT AFMS HOSPITAL % 100 % REIMBURSEMENT</span><a class="hh-watch-link" href="https://youtu.be/G6rslaBvth4" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V (S) 58</span><span class="hh-video-description">75 YEARS PLUS – NO REFERRAL REQD FOR OPD &amp; INVESTIGATIONS</span><a class="hh-watch-link" href="https://youtube.com/shorts/mhqBhhmnpsg" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 137</span><span class="hh-video-description">ECHS RATES 2025 - BUILDING AN AWARENESS FOR BENEFICIARIES</span><a class="hh-watch-link" href="https://youtu.be/bZ2_T_0GnKM" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 144</span><span class="hh-video-description">TREATMENT AT SERVICE HOSPITAL – ELIGIBILITY &amp; HOW TO ACCESS</span><a class="hh-watch-link" href="https://youtu.be/bD458-tvyDI" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 148</span><span class="hh-video-description">QUICK OVERVIEW – HOW TO BOOK OPD APPOINTMENT AT MILITARY HOSPITAL USING ORS</span><a class="hh-watch-link" href="https://youtu.be/9LS3c7S5sNE" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div></div></details><details class="hh-video-topic"><summary><span class="hh-topic-number">04</span><span>MEDICAL TREATMENT AT NON-EMPANELLED &amp; GOVT HOSPITAL</span><span class="hh-toggle" aria-hidden="true">+</span></summary><div class="hh-video-list"><div class="hh-video-row"><span class="hh-video-number">V 3</span><span class="hh-video-description">HOW TO GET TREATMENT IN NON-EMPANELLED HOSPITAL IN A MEDICAL EMERGENCY?</span><a class="hh-watch-link" href="https://youtu.be/wCbVxrf6-7U" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V (S) 32</span><span class="hh-video-description">WHAT ACTION TO TAKE IN NON-EMERGENCY TO GET TREATMENT IN NON-EMPANELLED HOSPITAL?</span><a class="hh-watch-link" href="https://youtube.com/shorts/qEzybhGrIZU" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 46</span><span class="hh-video-description">HOW TO GET TREATMENT AT GOVT HOSPITAL</span><a class="hh-watch-link" href="https://youtu.be/QkmBmc0nGL0" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 145</span><span class="hh-video-description">EMERGENCY MEDICAL CONDITION - ARE YOU READY?</span><a class="hh-watch-link" href="https://youtu.be/U_I-2e3mW7g" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div></div></details><details class="hh-video-topic"><summary><span class="hh-topic-number">05</span><span>MEDICAL TREATMENT AT POLYCLINIC</span><span class="hh-toggle" aria-hidden="true">+</span></summary><div class="hh-video-list"><div class="hh-video-row"><span class="hh-video-number">V(S)30</span><span class="hh-video-description">WORKING HOURS OF POLYCLINIC</span><a class="hh-watch-link" href="https://youtube.com/shorts/diQeXsxQI6Y" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V (S) 33</span><span class="hh-video-description">HOW DO YOU GET 90 DAYS MEDICINES FROM POLYCLINIC?</span><a class="hh-watch-link" href="https://youtube.com/shorts/QYAYMzjeH0o" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 45</span><span class="hh-video-description">HOW TO REGISTER COMPLAINT AT ECHS?</span><a class="hh-watch-link" href="https://youtu.be/Hw89EbCSaj4" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V – 55</span><span class="hh-video-description">MEDICINES FROM ECHS</span><a class="hh-watch-link" href="https://youtu.be/MILTd3t-arA" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V (S) 68</span><span class="hh-video-description">MONTHLY MEETINGS AT YOUR POLYCLINIC BY OIC</span><a class="hh-watch-link" href="https://youtube.com/shorts/SXOj95Pk9YI" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 102</span><span class="hh-video-description">HOW TO CHANGE PARENT POLYCLINIC FROM COMPUTER OR MOBILE PHONE</span><a class="hh-watch-link" href="https://youtu.be/O-W9179CsOY" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 105</span><span class="hh-video-description">ECDL AWARENESS VIDEO - ECHS CENTRAL DRUG LIST</span><a class="hh-watch-link" href="https://youtu.be/6bBqA9wefyg" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V(S) 109</span><span class="hh-video-description">REIMBURSEMENT OF MEDICINES COST - GST NUMBER NOT MANDATORY ON THE PHARMACY BILL</span><a class="hh-watch-link" href="https://youtube.com/shorts/Hf4QuSjQh3c" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 129</span><span class="hh-video-description">TREATMENT UNDER AYUSH</span><a class="hh-watch-link" href="https://youtu.be/CX_sv_OEgNc" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 134</span><span class="hh-video-description">V 134 VACCINES FOR ECHS BENEFICIARIES</span><a class="hh-watch-link" href="https://youtu.be/MhTrmncejTA" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 136</span><span class="hh-video-description">V 136 - E-SEHAT - CLICK-CONSULT-CARE- ONLINE OPD FROM THE COMFORT OF YOUR HOME -</span><a class="hh-watch-link" href="https://youtu.be/DI7YY1dTtyM" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 140</span><span class="hh-video-description">HOW TO GET NON ECDL ESSENTIAL MEDICINES</span><a class="hh-watch-link" href="https://youtu.be/uPzopDyrqgw" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 146</span><span class="hh-video-description">TREATMENT AT ECHS POLYCLINIC</span><a class="hh-watch-link" href="https://youtu.be/YgISnCULBNA" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 149</span><span class="hh-video-description">HOME-BASED REHABILITATION FACILITY</span><a class="hh-watch-link" href="https://youtu.be/BJvi1kBAigg" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 150</span><span class="hh-video-description">HOME (DOOR STEP) DELIVERY OF MEDICINES</span><a class="hh-watch-link" href="https://youtu.be/vazJ6w8Dlys" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 152</span><span class="hh-video-description">DENTAL TREATMENT AT ECHS</span><a class="hh-watch-link" href="https://youtu.be/TeI4vO3KSvI" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 153</span><span class="hh-video-description">FIND CONTACT DETAILS OF OIC POLYCLINIC &amp; REG CENTRE</span><a class="hh-watch-link" href="https://youtu.be/_EIj9Z3uPzQ" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 157</span><span class="hh-video-description">EVERY CRITICAL ASPECT YOU SHOULD KNOW ON DOMICILIARY (HOME AID) EQUIPMENT IS EXPLAINED</span><a class="hh-watch-link" href="https://youtu.be/9sK3UluJaDs" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div></div></details><details class="hh-video-topic"><summary><span class="hh-topic-number">06</span><span>REIMBURSEMENT OF CHARGES INCURRED BY BENEFICIARIES</span><span class="hh-toggle" aria-hidden="true">+</span></summary><div class="hh-video-list"><div class="hh-video-row"><span class="hh-video-number">V 60</span><span class="hh-video-description">HOW TO FIND REIMBURSEMENT CLAIM STATUS &amp; MEANING OF STATUS MESSAGES</span><a class="hh-watch-link" href="https://youtu.be/WBo3Nles5ME" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V (S) 66</span><span class="hh-video-description">REIMBURSEMENT CLAIMS CANNOT BE REJECTED AT ANY LEVEL. DECISION IS WITH CO ECHS</span><a class="hh-watch-link" href="https://youtube.com/shorts/_A2FHFov-1s" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 110</span><span class="hh-video-description">LIVER, LUNG &amp; HEART TRANSPLANT - HOW TO OBTAIN APPROVAL FOR REIMBURSEMENT</span><a class="hh-watch-link" href="https://youtu.be/PVdvBwz3Jj0" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 124</span><span class="hh-video-description">HOW TO ? – NON-AVAILABILITY (NA ) CERTIFICATE &amp; REIMBURSEMENT FINANCIAL LIMIT</span><a class="hh-watch-link" href="https://youtu.be/K0LmnRMxR3E" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 132</span><span class="hh-video-description">MEDICINES REIMBURSEMENT STEPS MADE EASY</span><a class="hh-watch-link" href="https://youtu.be/TALESjqESn8" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 133</span><span class="hh-video-description">REIMBURSEMENT OF PAYMENT MADE TO EMPANELLED HOSPITAL</span><a class="hh-watch-link" href="https://youtu.be/nFnVbtL2Mxk" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div></div></details><details class="hh-video-topic"><summary><span class="hh-topic-number">07</span><span>ECHS MOBILE APP (UPGRADED ECHS MOBILE APP)</span><span class="hh-toggle" aria-hidden="true">+</span></summary><div class="hh-video-list"><div class="hh-video-row"><span class="hh-video-number">V 112</span><span class="hh-video-description">INTRODUCTION - INSTALLATION &amp; REGISTRATION</span><a class="hh-watch-link" href="https://youtu.be/m_RK4GmARLw" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 113</span><span class="hh-video-description">HOW TO FIND EMPANELLED HOSPITAL &amp; CONTACT DETAILS</span><a class="hh-watch-link" href="https://youtu.be/bUAFvItvwNA" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 114</span><span class="hh-video-description">HOW TO FIND REIMBURSEMENT CLAIM STATUS &amp; 64 KB CARD APPLICATION STATUS</span><a class="hh-watch-link" href="https://youtu.be/yfgtE-mQ27Y" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 115</span><span class="hh-video-description">HOW TO LOGIN LOGOUT, CHANGE &amp; RESET PIN</span><a class="hh-watch-link" href="https://youtu.be/1P7ce-0yUAg" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 116</span><span class="hh-video-description">HOW TO BOOK OR CANCEL OPD APPT TO MEET DOCTOR</span><a class="hh-watch-link" href="https://youtu.be/mRpKf9I8sMk" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 117</span><span class="hh-video-description">HOW TO CHANGE POLYCLINIC, BLOCK CARD, CHECK REFERRAL STATUS</span><a class="hh-watch-link" href="https://youtu.be/IP5pZqDhZms" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 118</span><span class="hh-video-description">V 118_HOW TO GIVE ? FEEDBACK ON POLYCLINIC OR EMPANELLED HOSPITAL SERVICES</span><a class="hh-watch-link" href="https://youtu.be/JJtze4JQ448" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 119</span><span class="hh-video-description">V 119_HOW TO VIEW NOTIFICATIONS FROM ECHS</span><a class="hh-watch-link" href="https://youtu.be/6qWITcrK2nw" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div><div class="hh-video-row"><span class="hh-video-number">V 147</span><span class="hh-video-description">ECHS MOBILE APP QUICK OVERVIEW</span><a class="hh-watch-link" href="https://youtu.be/jfJyoUJkr-s" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div></div></details></div></section>
 
 <section id="hh-situation-solution" class="section hh-added-section" hidden>
 <h3>SITUATION–SOLUTION</h3>
 <p class="intro">Choose the video or guide that helps explain the situation you are facing.</p>
-<div class="hh-situation-item">
+<button id="hh-situation-admin-toggle" type="button" aria-expanded="false">SITUATION–SOLUTION ADMIN — OPEN</button>
+<div id="hh-situation-admin" aria-label="Situation-Solution administration">
+ <h4>MANAGE SITUATION–SOLUTION VIDEOS &amp; PDFS</h4>
+ <div class="hh-admin-grid">
+  <label>Action<select id="hh-ss-action"><option value="addvideo">ADD VIDEO</option><option value="editvideo">EDIT VIDEO</option><option value="deletevideo">DELETE VIDEO</option><option value="addpdf">ADD NEW PDF</option><option value="replacepdf">REPLACE EXISTING PDF</option></select></label>
+  <label id="hh-ss-video-select-wrap" style="display:none">Select existing video<select id="hh-ss-video-select"></select></label>
+  <label id="hh-ss-pdf-select-wrap" style="display:none">Select existing PDF<select id="hh-ss-pdf-select"></select></label>
+  <label id="hh-ss-number-wrap">Video number (format V 63)<input id="hh-ss-number" placeholder=""></label>
+  <label id="hh-ss-title-wrap">Video Title<input id="hh-ss-title" placeholder="Video title"></label>
+  <label id="hh-ss-url-wrap">Video URL<input id="hh-ss-url" type="url" placeholder="https://youtu.be/..."></label>
+  <label id="hh-ss-pdf-title-wrap" style="display:none">PDF title<input id="hh-ss-pdf-title" placeholder="PDF title"></label>
+  <label id="hh-ss-pdf-desc-wrap" style="display:none">PDF description<input id="hh-ss-pdf-desc" placeholder="Description shown on website"></label>
+  <label id="hh-ss-pdf-file-wrap" style="display:none">Choose PDF file<input id="hh-ss-pdf-file" type="file" accept="application/pdf,.pdf"></label>
+ </div>
+ <div class="hh-admin-actions"><button class="action" id="hh-ss-save" type="button">SAVE</button><button class="action secondary" id="hh-ss-clear" type="button">CLEAR</button></div>
+ <p id="hh-situation-admin-status" role="status">Situation–Solution changes in this local test are saved in this browser.</p>
+</div>
+<div class="hh-situation-item" id="hh-situation-items">
 <div class="hh-situation-video"><div class="hh-video-number">V154</div><div class="hh-situation-video-heading"><h4>VERY USEFUL DO NOT MISS — SITUATION–SOLUTION FOR CRITICAL AREAS</h4><a class="hh-watch-link" href="https://youtu.be/QVz5ixu01tM" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a></div></div>
-<div class="hh-situation-pdf"><h4>YOUR SITUATION – MY VIDEO SOLUTION</h4><p class="hh-video-description">PC • MH • EH • Emergency Medical Condition • 64 KB ECHS Card</p><a class="hh-watch-link" href="SITUATION_SOLUTION_GUIDE.pdf" target="_blank" rel="noopener noreferrer">OPEN PDF GUIDE ↗</a></div>
+<div class="hh-situation-pdf"><h4>YOUR SITUATION – MY VIDEO SOLUTION</h4><a class="hh-watch-link" href="SITUATION_SOLUTION_GUIDE.pdf" target="_blank" rel="noopener noreferrer">OPEN PDF GUIDE ↗</a></div>
 </div></section>
 
 <section id="hh-news-display" class="section hh-added-section" hidden aria-live="polite">
@@ -401,4 +447,44 @@ async function loadPublicNews(){
  }catch(err){host.replaceChildren();const p=document.createElement('p');p.className='intro';p.textContent='Latest news could not be loaded at this time.';host.append(p);console.error('HH public news:',err);}
 }
 loadPublicNews();
-</script></body></html>
+</script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ const section=document.getElementById('hh-situation-solution'); if(!section)return;
+ const $=id=>document.getElementById(id), storeKey='hh_situation_solution_pilot_104', pdfDbName='HH_SituationSolution_PDFs_104';
+ const initialVideo={number:'V154',title:'VERY USEFUL DO NOT MISS — SITUATION–SOLUTION FOR CRITICAL AREAS',url:'https://youtu.be/QVz5ixu01tM'};
+ const initialPdf={id:'existing-guide',title:'YOUR SITUATION – MY VIDEO SOLUTION',description:'',fileName:'SITUATION_SOLUTION_GUIDE.pdf',legacyUrl:'SITUATION_SOLUTION_GUIDE.pdf'};
+ let state;
+ try{state=JSON.parse(localStorage.getItem(storeKey)||'null')}catch(e){state=null}
+ if(!state||!Array.isArray(state.videos)||!Array.isArray(state.pdfs))state={videos:[initialVideo],pdfs:[initialPdf]};
+ const originalPdf=state.pdfs.find(p=>p.id==='existing-guide');if(originalPdf){originalPdf.title='YOUR SITUATION – MY VIDEO SOLUTION';originalPdf.description='';originalPdf.fileName='SITUATION_SOLUTION_GUIDE.pdf';originalPdf.legacyUrl='SITUATION_SOLUTION_GUIDE.pdf';}
+ const status=m=>{$('hh-situation-admin-status').textContent=m};
+ const persist=()=>{try{localStorage.setItem(storeKey,JSON.stringify(state));return true}catch(e){status('ERROR: Browser storage is full or unavailable.');return false}};
+ const openDb=()=>new Promise((resolve,reject)=>{if(!('indexedDB' in window)){reject(new Error('This browser does not support local PDF storage.'));return;}const req=indexedDB.open(pdfDbName,1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('pdfs'))db.createObjectStore('pdfs',{keyPath:'id'});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('Could not open PDF storage.'));});
+ const savePdf=(id,file)=>openDb().then(db=>new Promise((resolve,reject)=>{const tx=db.transaction('pdfs','readwrite');tx.objectStore('pdfs').put({id,blob:file,name:file.name,type:file.type||'application/pdf'});tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>{db.close();reject(tx.error||new Error('PDF could not be saved.'));};}));
+ const getPdf=id=>openDb().then(db=>new Promise((resolve,reject)=>{const tx=db.transaction('pdfs','readonly');const req=tx.objectStore('pdfs').get(id);req.onsuccess=()=>{const value=req.result;db.close();resolve(value||null);};req.onerror=()=>{db.close();reject(req.error);};}));
+ const items=$('hh-situation-items');
+ function render(){
+  items.replaceChildren();
+  state.videos.forEach(v=>{const card=document.createElement('div');card.className='hh-situation-video';const num=document.createElement('div');num.className='hh-video-number';num.textContent=v.number;const heading=document.createElement('div');heading.className='hh-situation-video-heading';const h=document.createElement('h4');h.textContent=v.title;const a=document.createElement('a');a.className='hh-watch-link';a.href=v.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='WATCH VIDEO ↗';heading.append(h,a);card.append(num,heading);items.append(card);});
+  state.pdfs.forEach(p=>{const card=document.createElement('div');card.className='hh-situation-pdf';const h=document.createElement('h4');h.textContent=p.title;const a=document.createElement('a');a.className='hh-watch-link';a.target='_blank';a.rel='noopener noreferrer';a.textContent='OPEN PDF GUIDE ↗';a.href=p.legacyUrl||'#';if(p.blobUrl)a.href=p.blobUrl;else if(p.id!=='existing-guide'){getPdf(p.id).then(file=>{if(file){const url=URL.createObjectURL(file.blob);p.blobUrl=url;a.href=url;}}).catch(()=>{});}card.append(h);if(p.description){const desc=document.createElement('p');desc.className='hh-video-description';desc.textContent=p.description;card.append(desc);}card.append(a);items.append(card);});
+  fillSelectors();
+ }
+ function fillSelectors(){const vs=$('hh-ss-video-select'),ps=$('hh-ss-pdf-select'),ov=vs.value,op=ps.value;vs.replaceChildren();ps.replaceChildren();state.videos.forEach((v,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=v.number+' — '+v.title;vs.append(o)});state.pdfs.forEach((p,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=p.title;ps.append(o)});if(ov&&Number(ov)<state.videos.length)vs.value=ov;if(op&&Number(op)<state.pdfs.length)ps.value=op;}
+ function update(){const a=$('hh-ss-action').value,ev=a==='editvideo'||a==='deletevideo',ep=a==='replacepdf',pdf=a==='addpdf'||ep; $('hh-ss-video-select-wrap').style.display=ev?'block':'none';$('hh-ss-pdf-select-wrap').style.display=ep?'block':'none';['number','title','url'].forEach(k=>$(('hh-ss-'+k+'-wrap')).style.display=pdf?'none':'block');['title','desc','file'].forEach(k=>$('hh-ss-pdf-'+k+'-wrap').style.display=pdf?'block':'none');$('hh-ss-number').disabled=a==='deletevideo';$('hh-ss-title').disabled=a==='deletevideo';$('hh-ss-url').disabled=a==='deletevideo';if(a==='editvideo'){const v=state.videos[Number($('hh-ss-video-select').value)];if(v){$('hh-ss-number').value=v.number;$('hh-ss-title').value=v.title;$('hh-ss-url').value=v.url;}}else if(a==='replacepdf'){const p=state.pdfs[Number($('hh-ss-pdf-select').value)];if(p){$('hh-ss-pdf-title').value=p.title;$('hh-ss-pdf-desc').value=p.description||'';$('hh-ss-pdf-desc-wrap').style.display=p.id==='existing-guide'?'none':'block';}}else if(a==='addvideo'||a==='addpdf'){clearFields();}if(a==='replacepdf'&&state.pdfs[Number($('hh-ss-pdf-select').value)]?.id!=='existing-guide')$('hh-ss-pdf-desc-wrap').style.display='block';}
+ function clearFields(){['hh-ss-number','hh-ss-title','hh-ss-url','hh-ss-pdf-title','hh-ss-pdf-desc','hh-ss-pdf-file'].forEach(id=>{const el=$(id);if(el)el.value='';});}
+ $('hh-situation-admin-toggle').addEventListener('click',()=>{const panel=$('hh-situation-admin'),open=!panel.classList.contains('open');panel.classList.toggle('open',open);$('hh-situation-admin-toggle').textContent=open?'SITUATION–SOLUTION ADMIN — CLOSE':'SITUATION–SOLUTION ADMIN — OPEN';$('hh-situation-admin-toggle').setAttribute('aria-expanded',String(open));});
+ $('hh-ss-action').addEventListener('change',()=>{update();status('Ready. No changes saved yet.');});$('hh-ss-video-select').addEventListener('change',update);$('hh-ss-pdf-select').addEventListener('change',update);
+ $('hh-ss-clear').addEventListener('click',()=>{clearFields();status('Fields cleared. No changes saved.');});
+ $('hh-ss-save').addEventListener('click',async()=>{const a=$('hh-ss-action').value;
+  if(a==='addvideo'){const v={number:$('hh-ss-number').value.trim(),title:$('hh-ss-title').value.trim(),url:$('hh-ss-url').value.trim()};if(!v.number||!v.title||!/^https:\/\//i.test(v.url)){status('ERROR: Enter video number, title and a valid HTTPS URL.');return;}state.videos.push(v);}
+  else if(a==='editvideo'){const i=Number($('hh-ss-video-select').value),v={number:$('hh-ss-number').value.trim(),title:$('hh-ss-title').value.trim(),url:$('hh-ss-url').value.trim()};if(!state.videos[i]){status('ERROR: Select an existing video.');return;}if(!v.number||!v.title||!/^https:\/\//i.test(v.url)){status('ERROR: Enter video number, title and a valid HTTPS URL.');return;}state.videos[i]=v;}
+  else if(a==='deletevideo'){const i=Number($('hh-ss-video-select').value),v=state.videos[i];if(!v){status('ERROR: Select an existing video.');return;}if(!confirm('Delete '+v.number+' — '+v.title+'?'))return;state.videos.splice(i,1);}
+  else if(a==='addpdf'||a==='replacepdf'){const title=$('hh-ss-pdf-title').value.trim(),description=$('hh-ss-pdf-desc').value.trim(),file=$('hh-ss-pdf-file').files[0];if(!title){status('ERROR: Enter PDF title.');return;}if(!file||(!file.type.includes('pdf')&&!file.name.toLowerCase().endsWith('.pdf'))){status('ERROR: Select a PDF file.');return;}const id=a==='addpdf'?'ss-pdf-'+Date.now()+'-'+Math.random().toString(36).slice(2,7):state.pdfs[Number($('hh-ss-pdf-select').value)]?.id;if(!id){status('ERROR: Select an existing PDF to replace.');return;}try{await savePdf(id,file);if(a==='addpdf')state.pdfs.push({id,title,description,fileName:file.name});else{const p=state.pdfs[Number($('hh-ss-pdf-select').value)];p.title=p.id==='existing-guide'?'YOUR SITUATION – MY VIDEO SOLUTION':title;p.description=p.id==='existing-guide'?'':description;p.fileName=file.name;p.legacyUrl='';p.blobUrl='';} }catch(e){status('ERROR: '+e.message);return;}}
+  if(!persist())return;render();clearFields();status(a==='deletevideo'?'SUCCESS: Situation–Solution video deleted in this browser.':a==='editvideo'?'SUCCESS: Situation–Solution video updated in this browser.':a==='addvideo'?'SUCCESS: Situation–Solution video added in this browser.':a==='addpdf'?'SUCCESS: PDF added in this browser.':'SUCCESS: Existing PDF replaced in this browser.');
+ });
+ render();update();
+});
+</script>
+
+</body></html>
