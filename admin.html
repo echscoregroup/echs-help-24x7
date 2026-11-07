@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helping Hands for ECHS | Admin 1.0.0</title>
+<style>
+:root{--navy:#0b1f3a;--gold:#c6a45a;--ivory:#f7f6f2;--ink:#1d2b3a;--line:#dfe4ea}
+*{box-sizing:border-box}body{margin:0;background:var(--ivory);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+header{background:var(--navy);color:#fff;padding:18px 4%;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{font-size:21px;margin:0}header p{margin:5px 0 0;color:#e8d9b4;font-size:13px}
+a,button{cursor:pointer}button{border:0;border-radius:5px;padding:10px 14px;font-weight:700;background:var(--navy);color:white}button.secondary{background:#e8edf2;color:var(--navy);border:1px solid #cbd4de}button.danger{background:#9b2c2c}
+.wrap{max-width:1500px;margin:auto;padding:20px 3% 40px}
+.notice{background:#fff8e8;border:1px solid #e3cd94;padding:12px 15px;border-radius:7px;font-size:13px;line-height:1.5;margin-bottom:18px}
+.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);gap:18px;align-items:start}
+.panel{background:white;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:18px}
+.panel h2{font-size:17px;color:var(--navy);margin:0;padding:14px 16px;border-bottom:1px solid var(--line);background:#f8fafc}
+.panel .body{padding:15px}
+iframe{width:100%;height:1050px;border:0;display:block;background:white}
+label{display:block;font-size:12px;font-weight:700;margin:10px 0 5px}
+input,textarea,select{width:100%;padding:9px;border:1px solid #cbd4de;border-radius:5px;font:14px Arial;background:#fff}
+textarea{min-height:80px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.small{font-size:12px;color:#5b6876;line-height:1.45}
+.item{border:1px solid var(--line);border-radius:6px;padding:10px;margin:9px 0}
+.item strong{display:block;color:var(--navy);font-size:13px}.item p{font-size:12px;margin:5px 0;white-space:pre-wrap}
+.list{max-height:250px;overflow:auto}
+footer{text-align:center;color:#697687;font-size:11px;padding:18px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}iframe{height:900px}.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div><h1>HELPING HANDS FOR ECHS — ADMINISTRATION</h1><p>ADMIN FACING VERSION 1.0.2 · MATCHED TO BENEFICIARY-FACING 1.0.2</p></div>
+<div class="actions"><a href="index.html" target="_blank"><button class="secondary">Open User-facing Screen</button></a></div></header>
+<div class="wrap">
+<div class="notice"><strong>ADMIN PILOT — LOCAL WORKING COPY ONLY.</strong> The public website screen shown on the left is loaded directly from <code>index.html</code> and has not been edited. The management entries in this pilot are stored in this browser only. They are not connected to the live website, a server, or GitHub. Deleting a video entry here does not delete its YouTube video or remove it from the public screen.</div>
+<div class="layout">
+<section class="panel"><h2>BENEFICIARY-FACING WEBSITE — VERSION 1.0.2</h2><iframe src="index.html" title="User-facing website preview"></iframe></section>
+<aside>
+<section class="panel"><h2>1. FEEDBACK MANAGEMENT</h2><div class="body">
+<p class="small">Record feedback received by the administrator. Export a month-wise report with the latest month first. This pilot does not retrieve feedback automatically from WhatsApp or other channels.</p>
+<div class="row"><div><label for="fbdate">Date received</label><input id="fbdate" type="date"></div><div><label for="fbcat">Category</label><select id="fbcat"><option>Website</option><option>Video</option><option>ECHS information</option><option>Suggestion</option><option>Other</option></select></div></div>
+<label for="fbsubject">Subject</label><input id="fbsubject" placeholder="Short subject">
+<label for="fbtext">Feedback (retain original wording)</label><textarea id="fbtext" placeholder="Enter feedback exactly as received"></textarea>
+<div class="row"><div><label for="fbstatus">Status</label><select id="fbstatus"><option>New</option><option>Under review</option><option>Action taken</option><option>Closed</option></select></div><div><label for="fbaction">Action / remarks</label><input id="fbaction" placeholder="Action or follow-up"></div></div>
+<div class="actions"><button onclick="addFeedback()">Add Feedback</button><button class="secondary" onclick="exportFeedback()">Export Month-wise CSV</button></div>
+<div id="feedbackList" class="list"></div>
+</div></section>
+<section class="panel"><h2>2. NEWS &amp; IMPROVEMENTS</h2><div class="body">
+<p class="small">Prepare text for the existing ECHS Latest News area. Publishing is not automatic; approved text must be implemented through the controlled release process.</p>
+<label for="newsTitle">News heading</label><input id="newsTitle" placeholder="Enter heading">
+<label for="newsText">News / improvement text</label><textarea id="newsText" placeholder="Write the update"></textarea>
+<div class="actions"><button onclick="saveNewsDraft()">Save Local Draft</button><button class="secondary" onclick="downloadNews()">Download Text</button></div>
+<p id="newsMsg" class="small">No draft saved in this browser session.</p>
+</div></section>
+<section class="panel"><h2>3. VIDEO BOX MANAGEMENT</h2><div class="body">
+<p class="small">Maintain a local working list of video entries for review. Add, edit or remove entries from this draft list. These actions do not alter the public Video Library or YouTube.</p>
+<label for="vidcat">Video box / category</label><select id="vidcat"><option>ECHS VIDEO LIBRARY</option><option>SITUATION–SOLUTION</option></select>
+<label for="vidtitle">Video title</label><input id="vidtitle" placeholder="Video title">
+<div class="row"><div><label for="vidno">Video number</label><input id="vidno" placeholder="e.g. V155"></div><div><label for="vidurl">Video URL</label><input id="vidurl" placeholder="https://..."></div></div>
+<label for="viddesc">Description</label><textarea id="viddesc" placeholder="Short description"></textarea>
+<div class="actions"><button onclick="saveVideo()">Add / Update Entry</button><button class="secondary" onclick="clearVideoForm()">Clear Form</button></div>
+<div id="videoList" class="list"></div>
+</div></section>
+</aside></div></div>
+<footer>HH WEBSITE ADMIN FACING 1.0.2 · Separate pilot interface · Public baseline content retained unchanged</footer>
+<script>
+const KEY='hh_admin_100_';
+let feedback=JSON.parse(localStorage.getItem(KEY+'feedback')||'[]');
+let videos=JSON.parse(localStorage.getItem(KEY+'videos')||'[]');
+let editingVideo=-1;
+function persist(){localStorage.setItem(KEY+'feedback',JSON.stringify(feedback));localStorage.setItem(KEY+'videos',JSON.stringify(videos))}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderFeedback(){
+ const el=document.getElementById('feedbackList');
+ el.innerHTML=feedback.slice().sort((a,b)=>b.date.localeCompare(a.date)).map((f,i)=>`<div class="item"><strong>${esc(f.date)} · ${esc(f.subject||'(No subject)')}</strong><p>${esc(f.category)} · ${esc(f.status)}</p><p>${esc(f.text)}</p><p>Action: ${esc(f.action)}</p><button class="danger" onclick="deleteFeedback(${feedback.indexOf(f)})">Delete record</button></div>`).join('')||'<p class="small">No feedback records entered yet.</p>';
+}
+function addFeedback(){
+ const date=document.getElementById('fbdate').value, text=document.getElementById('fbtext').value.trim();
+ if(!date||!text){alert('Enter the date and feedback.');return}
+ feedback.push({date,category:fbcat.value,subject:fbsubject.value,text,status:fbstatus.value,action:fbaction.value});
+ persist();renderFeedback();fbsubject.value='';fbtext.value='';fbaction.value='';
+}
+function deleteFeedback(i){if(confirm('Delete this local feedback record?')){feedback.splice(i,1);persist();renderFeedback()}}
+function exportFeedback(){
+ if(!feedback.length){alert('There are no feedback records to export.');return}
+ const sorted=feedback.slice().sort((a,b)=>b.date.localeCompare(a.date));
+ const groups={};sorted.forEach(f=>{const m=f.date.slice(0,7);(groups[m]??=[]).push(f)});
+ const rows=[['Month','Date','Category','Subject','Feedback','Status','Action / remarks']];
+ Object.keys(groups).sort().reverse().forEach(m=>groups[m].forEach(f=>rows.push([m,...['date','category','subject','text','status','action'].map(k=>f[k])])));
+ const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='HH_FEEDBACK_MONTHWISE_LATEST_FIRST.csv';a.click();URL.revokeObjectURL(a.href);
+}
+function saveNewsDraft(){
+ const data={title:newsTitle.value,text:newsText.value};localStorage.setItem(KEY+'news',JSON.stringify(data));newsMsg.textContent='Local draft saved in this browser. Not published.'; 
+}
+function downloadNews(){
+ const data={title:newsTitle.value,text:newsText.value};if(!data.title&&!data.text){alert('Enter news text first.');return}
+ const blob=new Blob([data.title+'\n\n'+data.text],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='HH_NEWS_IMPROVEMENT_DRAFT.txt';a.click();URL.revokeObjectURL(a.href);
+}
+function clearVideoForm(){editingVideo=-1;vidcat.value='ECHS VIDEO LIBRARY';vidtitle.value='';vidno.value='';vidurl.value='';viddesc.value=''}
+function saveVideo(){
+ if(!vidtitle.value.trim()){alert('Enter a video title.');return}
+ const v={category:vidcat.value,title:vidtitle.value.trim(),number:vidno.value.trim(),url:vidurl.value.trim(),description:viddesc.value.trim()};
+ if(editingVideo>=0)videos[editingVideo]=v;else videos.push(v);
+ persist();renderVideos();clearVideoForm();
+}
+function editVideo(i){const v=videos[i];editingVideo=i;vidcat.value=v.category;vidtitle.value=v.title;vidno.value=v.number;vidurl.value=v.url;viddesc.value=v.description;window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}
+function deleteVideo(i){if(confirm('Remove this entry from the local admin draft list only? The public website and YouTube are not changed.')){videos.splice(i,1);persist();renderVideos()}}
+function renderVideos(){videoList.innerHTML=videos.map((v,i)=>`<div class="item"><strong>${esc(v.number)} · ${esc(v.title)}</strong><p>${esc(v.category)} · ${esc(v.description)}</p><p>${esc(v.url)}</p><div class="actions"><button class="secondary" onclick="editVideo(${i})">Edit</button><button class="danger" onclick="deleteVideo(${i})">Delete draft entry</button></div></div>`).join('')||'<p class="small">No video draft entries yet. Add an entry above to begin a local management list.</p>'}
+(function init(){const n=JSON.parse(localStorage.getItem(KEY+'news')||'null');if(n){newsTitle.value=n.title;newsText.value=n.text;newsMsg.textContent='A local news draft is available in this browser.'}renderFeedback();renderVideos()})();
+</script></body></html>
