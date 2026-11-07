@@ -1,7 +1,5 @@
-NOVEMBER 2026
-04 NOV 2026 — TRIAL RUN BY ME TO PUBLISH A NEWS ITEM: Using the draft manual this news is being published in new HH website; the steps are also being validated
-04 NOV 2026 — 4 NOV NEWS PUBLISHING TEST: 4 NOV This is a test of the new Helping Hands for ECHS NEWS publishing facility. The administrator can now enter news directly through the NEWS entry window
-ECHS NEWS: Monthly updates will be published here for all beneficiaries.
-ECHS NEWS: Beneficiaries can find the latest website announcements on this page.
-OCTOBER 2026
-ECHS NEWS: Our website news publishing system was initiated.
+NOVEMBER 2026 
+05 Nov 2026 
+FROM CDR V K SANTHANAM (Retd) TO EVERY ECHS BENEFICIARY & FAMILY MEMBER — A MAJOR INITIATIVE FOR YOU IS NOW JUST ONE CLICK AWAY! Have you ever faced an ECHS-related question and wondered where to find the correct information? Imagine having a single Digital Destination where easy to understand Integrated Information is brought just ONE Screen. That is what my MORE THAN a Website HELPING HANDS FOR ECHS brings to you today onwards.
+Try It. I am sure You will continue to visit the site daily. Click the link to Launch my Website https://echscoregroup.github.io/ECHSHELP/ Bookmark the site for easy access in future. 
+EXPLORE IMPORTANT AREAS : 🎥 1. ECHS VIDEO LIBRARY - Select the subject & Click to watch the Video. 🧭 2. SITUATION–SOLUTION – I have anticipated the most common Scenarios you may face and provided a Video Solution 🤖 3. AI enabled ECHS BENEFICIARY VIRTUAL ASSISTANT (EBVA) - Intelligent EBVA to get 100 % Accurate Answers. No Answers are given by Guessing . 📰 3. ECHS NEWS - Latest Relevant & Useful NEWS 🌐4. Launch ECHS Official Website 🏥 5. Click to Find Empanelled Hospitals Anywhere in India . WHY SHOULD YOU VISIT? Awareness is Empowerment. Knowing the correct procedure, understanding your entitlements and being aware of the actions required, can help you avoid confusion and obtain the Best possible Healthcare from ECHS MY MISSION - To Empower Every ECHS Beneficiary through Voluntary - Non-Commercial approach. Regards & JAI HIND
