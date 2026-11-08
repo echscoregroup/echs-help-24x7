@@ -1,0 +1,2 @@
+Harmless deployment trigger for Vercel test branch HH-WEBSITE-PUBLISHING-TEST-1.0.4.
+This file does not change website content or production GitHub Pages.
