@@ -142,7 +142,7 @@ footer{background:var(--navy);color:#fff;padding:25px 5%;display:flex;justify-co
 @media(max-width:600px){#hh-situation-admin .hh-admin-grid{grid-template-columns:1fr}}
 
 </style>
-<button id="hh-video-admin-toggle" type="button" aria-expanded="false">VIDEO LIBRARY ADMIN — OPEN</button>
+<button id="hh-video-admin-toggle" type="button" aria-expanded="false">VIDEO LIBRARY ADMIN — OPEN</button> <a href="/api/auth/login" style="display:inline-block;margin:6px 0;padding:8px 12px;border:1px solid #c6a45a;border-radius:5px;color:#0b1f3a;font-size:12px;font-weight:800;text-decoration:none">ADMIN SIGN IN</a>
 <div id="hh-video-admin" aria-label="Video Library administration">
  <h4>MANAGE VIDEOS &amp; CATEGORIES</h4>
  <div class="hh-admin-grid">
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded',function(){
  ['hh-admin-action','hh-admin-category','hh-admin-existing','hh-admin-position','hh-admin-category-position'].forEach(id=>$(id).addEventListener('change',()=>{if(id==='hh-admin-category')fillSelects();else updateAction();clearStatus();}));
  ['hh-admin-number','hh-admin-title','hh-admin-url','hh-admin-category-name'].forEach(id=>$(id).addEventListener('input',clearStatus));
  $('hh-admin-cancel').addEventListener('click',()=>{$('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';clearStatus();});
- $('hh-admin-save').addEventListener('click',()=>{
+ $('hh-admin-save').addEventListener('click',async()=>{
   const action=$('hh-admin-action').value;
   const ci=Number($('hh-admin-category').value);
   const category=data[ci];
@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded',function(){
   $('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';$('hh-admin-category-name').value='';
   setStatus(action==='category'?'PUBLISHED: Category and first video are now shared on the website.':action==='editcategory'?'PUBLISHED: Category name updated on the website.':'PUBLISHED: Video change is now shared on the website.');
  });
- render();
+ (async()=>{try{const r=await fetch('/api/content?type=videos',{cache:'no-store'});const j=await r.json();if(r.ok&&j.ok&&j.found&&Array.isArray(j.data))data=j.data;}catch(e){console.warn('Shared Video Library not available; showing baseline content.',e);}render();})();
 });
 </script>
 
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded',function(){
 <section id="hh-situation-solution" class="section hh-added-section" hidden>
 <h3>SITUATION–SOLUTION</h3>
 <p class="intro">Choose the video or guide that helps explain the situation you are facing.</p>
-<button id="hh-situation-admin-toggle" type="button" aria-expanded="false">SITUATION–SOLUTION ADMIN — OPEN</button>
+<button id="hh-situation-admin-toggle" type="button" aria-expanded="false">SITUATION–SOLUTION ADMIN — OPEN</button> <a href="/api/auth/login" style="display:inline-block;margin:6px 0;padding:8px 12px;border:1px solid #c6a45a;border-radius:5px;color:#0b1f3a;font-size:12px;font-weight:800;text-decoration:none">ADMIN SIGN IN</a>
 <div id="hh-situation-admin" aria-label="Situation-Solution administration">
  <h4>MANAGE SITUATION–SOLUTION VIDEOS &amp; PDFS</h4>
  <div class="hh-admin-grid">
