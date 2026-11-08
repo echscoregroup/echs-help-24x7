@@ -10,5 +10,6 @@ module.exports=(req,res)=>{
   u.searchParams.set("redirect_uri",APP_BASE_URL.replace(/\/$/,"")+"/api/auth/callback");
   u.searchParams.set("state",state);
   u.searchParams.set("allow_signup","false");
+  u.searchParams.set("scope","public_repo");
   res.status(302).setHeader("Location",u.toString()).end();
 };
