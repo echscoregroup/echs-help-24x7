@@ -1,7 +1,7 @@
 const {json,requireAdmin,github}=require("./_lib");
 
-const REPO=process.env.GITHUB_REPOSITORY||"echscoregroup/echs-help-24x7";
-const BRANCH=process.env.GITHUB_BRANCH;
+const REPO="echscoregroup/echs-help-24x7";
+const BRANCH="HH-WEBSITE-PUBLISHING-TEST-1.0.4";
 const FILES={
   videos:"hh-video-library.json",
   situation:"hh-situation-solution.json"
@@ -28,7 +28,7 @@ module.exports=async(req,res)=>{
   if(!Object.prototype.hasOwnProperty.call(FILES,type))return json(res,400,{ok:false,error:"Unknown publishing area."});
   if(req.method==="GET"){
     try{
-      const url="https://raw.githubusercontent.com/"+REPO+"/"+encodeURIComponent(BRANCH||"main")+"/"+FILES[type];
+      const url="https://raw.githubusercontent.com/"+REPO+"/"+encodeURIComponent(BRANCH)+"/"+FILES[type];
       const r=await fetch(url,{headers:{"Cache-Control":"no-cache"}});
       if(r.status===404)return json(res,200,{ok:true,found:false});
       if(!r.ok)throw new Error("Published content could not be read.");
@@ -39,7 +39,6 @@ module.exports=async(req,res)=>{
   if(req.method!=="POST")return res.status(405).end();
   if(!validOrigin(req))return json(res,403,{ok:false,error:"Request origin not permitted."});
   const admin=requireAdmin(req,res);if(!admin)return;
-  if(!BRANCH)return json(res,503,{ok:false,error:"Publishing branch is not configured."});
   try{
     const data=req.body&&req.body.data;
     if(!validPayload(type,data))return json(res,400,{ok:false,error:"The submitted publishing data is incomplete or invalid."});
