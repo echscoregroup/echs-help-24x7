@@ -12,8 +12,8 @@ module.exports=async(req,res)=>{
     if(!tokenResponse.ok||!tokenData.access_token)throw new Error("GitHub sign-in did not return an access token.");
     const user=await github("/user",tokenData.access_token);
     const allowed=String(process.env.ADMIN_GITHUB_LOGIN||"").toLowerCase();
-    if(!allowed||String(user.login||"").toLowerCase()!==allowed)return res.status(403).send("This GitHub account is not authorised to publish news.");
+    if(!allowed||String(user.login||"").toLowerCase()!==allowed)return res.status(403).send("This GitHub account is not authorised to publish website content.");
     cookie(res,"hh_admin_session",seal({token:tokenData.access_token,login:user.login.toLowerCase(),exp:Date.now()+8*60*60*1000}),8*60*60);
-    res.status(302).setHeader("Location","/news-admin-secure.html").end();
+    res.status(302).setHeader("Location","/").end();
   }catch(e){res.status(502).send("Administrator sign-in failed: "+e.message);}
 };
