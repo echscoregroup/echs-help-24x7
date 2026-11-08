@@ -178,14 +178,15 @@ document.addEventListener('DOMContentLoaded',function(){
  if(!Array.isArray(data)){
   data=topics().map(t=>({category:topicName(t),rows:readRows(t)}));
  }
- const persist=()=>{
+ const persist=async()=>{
+  try{localStorage.setItem(storeKey,JSON.stringify(data));}catch(error){console.warn('Local backup unavailable',error);}
   try{
-   localStorage.setItem(storeKey,JSON.stringify(data));
+   const response=await fetch('/api/content?type=videos',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({data})});
+   const result=await response.json().catch(()=>({}));
+   if(response.status===401)return {ok:false,message:'ADMIN SIGN-IN REQUIRED. Select ADMIN SIGN IN above, then sign in with the authorised GitHub account.'};
+   if(!response.ok||!result.ok)return {ok:false,message:result.error||'Shared publishing failed.'};
    return {ok:true};
-  }catch(error){
-   console.error('HH Video Admin storage error:',error);
-   return {ok:false,message:error&&error.name==='QuotaExceededError'?'Browser storage is full. Changes are shown only until this page is closed.':'Browser storage is unavailable for this local file. Changes are shown only until this page is closed.'};
-  }
+  }catch(error){return {ok:false,message:'Publishing service is not connected. Open the Vercel test website and try again.'};}
  };
  const setStatus=message=>{$('hh-admin-status').textContent=message;};
  const clearStatus=()=>setStatus('Ready. No changes saved yet.');
@@ -317,11 +318,11 @@ document.addEventListener('DOMContentLoaded',function(){
     rows[ix]=item;
    }
   }
-  const saveResult=persist();
+  const saveResult=await persist();
   if(!saveResult.ok){setStatus('ERROR: '+saveResult.message);return;}
   render();
   $('hh-admin-number').value='';$('hh-admin-title').value='';$('hh-admin-url').value='';$('hh-admin-category-name').value='';
-  setStatus(action==='category'?'SUCCESS: Category and first video saved in this browser.':action==='editcategory'?'SUCCESS: Category name updated in this browser.':'SUCCESS: Video change saved in this browser.');
+  setStatus(action==='category'?'PUBLISHED: Category and first video are now shared on the website.':action==='editcategory'?'PUBLISHED: Category name updated on the website.':'PUBLISHED: Video change is now shared on the website.');
  });
  render();
 });
@@ -459,7 +460,16 @@ document.addEventListener('DOMContentLoaded',function(){
  if(!state||!Array.isArray(state.videos)||!Array.isArray(state.pdfs))state={videos:[initialVideo],pdfs:[initialPdf]};
  const originalPdf=state.pdfs.find(p=>p.id==='existing-guide');if(originalPdf){originalPdf.title='YOUR SITUATION – MY VIDEO SOLUTION';originalPdf.description='';originalPdf.fileName='SITUATION_SOLUTION_GUIDE.pdf';originalPdf.legacyUrl='SITUATION_SOLUTION_GUIDE.pdf';}
  const status=m=>{$('hh-situation-admin-status').textContent=m};
- const persist=()=>{try{localStorage.setItem(storeKey,JSON.stringify(state));return true}catch(e){status('ERROR: Browser storage is full or unavailable.');return false}};
+ const persist=async()=>{
+  try{localStorage.setItem(storeKey,JSON.stringify(state));}catch(e){console.warn('Local backup unavailable',e);}
+  try{
+   const response=await fetch('/api/content?type=situation',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:state})});
+   const result=await response.json().catch(()=>({}));
+   if(response.status===401){status('ADMIN SIGN-IN REQUIRED. Select ADMIN SIGN IN above, then sign in with the authorised GitHub account.');return false;}
+   if(!response.ok||!result.ok){status(result.error||'Shared publishing failed.');return false;}
+   return true;
+  }catch(e){status('Publishing service is not connected. Open the Vercel test website and try again.');return false;}
+ };
  const openDb=()=>new Promise((resolve,reject)=>{if(!('indexedDB' in window)){reject(new Error('This browser does not support local PDF storage.'));return;}const req=indexedDB.open(pdfDbName,1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('pdfs'))db.createObjectStore('pdfs',{keyPath:'id'});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('Could not open PDF storage.'));});
  const savePdf=(id,file)=>openDb().then(db=>new Promise((resolve,reject)=>{const tx=db.transaction('pdfs','readwrite');tx.objectStore('pdfs').put({id,blob:file,name:file.name,type:file.type||'application/pdf'});tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>{db.close();reject(tx.error||new Error('PDF could not be saved.'));};}));
  const getPdf=id=>openDb().then(db=>new Promise((resolve,reject)=>{const tx=db.transaction('pdfs','readonly');const req=tx.objectStore('pdfs').get(id);req.onsuccess=()=>{const value=req.result;db.close();resolve(value||null);};req.onerror=()=>{db.close();reject(req.error);};}));
@@ -467,7 +477,7 @@ document.addEventListener('DOMContentLoaded',function(){
  function render(){
   items.replaceChildren();
   state.videos.forEach(v=>{const card=document.createElement('div');card.className='hh-situation-video';const num=document.createElement('div');num.className='hh-video-number';num.textContent=v.number;const heading=document.createElement('div');heading.className='hh-situation-video-heading';const h=document.createElement('h4');h.textContent=v.title;const a=document.createElement('a');a.className='hh-watch-link';a.href=v.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='WATCH VIDEO ↗';heading.append(h,a);card.append(num,heading);items.append(card);});
-  state.pdfs.forEach(p=>{const card=document.createElement('div');card.className='hh-situation-pdf';const h=document.createElement('h4');h.textContent=p.title;const a=document.createElement('a');a.className='hh-watch-link';a.target='_blank';a.rel='noopener noreferrer';a.textContent='OPEN PDF GUIDE ↗';a.href=p.legacyUrl||'#';if(p.blobUrl)a.href=p.blobUrl;else if(p.id!=='existing-guide'){getPdf(p.id).then(file=>{if(file){const url=URL.createObjectURL(file.blob);p.blobUrl=url;a.href=url;}}).catch(()=>{});}card.append(h);if(p.description){const desc=document.createElement('p');desc.className='hh-video-description';desc.textContent=p.description;card.append(desc);}card.append(a);items.append(card);});
+  state.pdfs.forEach(p=>{const card=document.createElement('div');card.className='hh-situation-pdf';const h=document.createElement('h4');h.textContent=p.title;const a=document.createElement('a');a.className='hh-watch-link';a.target='_blank';a.rel='noopener noreferrer';a.textContent='OPEN PDF GUIDE ↗';a.href=p.fileUrl||p.legacyUrl||'#';if(p.blobUrl)a.href=p.blobUrl;else if(p.id!=='existing-guide'){getPdf(p.id).then(file=>{if(file){const url=URL.createObjectURL(file.blob);p.blobUrl=url;a.href=url;}}).catch(()=>{});}card.append(h);if(p.description){const desc=document.createElement('p');desc.className='hh-video-description';desc.textContent=p.description;card.append(desc);}card.append(a);items.append(card);});
   fillSelectors();
  }
  function fillSelectors(){const vs=$('hh-ss-video-select'),ps=$('hh-ss-pdf-select'),ov=vs.value,op=ps.value;vs.replaceChildren();ps.replaceChildren();state.videos.forEach((v,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=v.number+' — '+v.title;vs.append(o)});state.pdfs.forEach((p,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=p.title;ps.append(o)});if(ov&&Number(ov)<state.videos.length)vs.value=ov;if(op&&Number(op)<state.pdfs.length)ps.value=op;}
@@ -480,8 +490,16 @@ document.addEventListener('DOMContentLoaded',function(){
   if(a==='addvideo'){const v={number:$('hh-ss-number').value.trim(),title:$('hh-ss-title').value.trim(),url:$('hh-ss-url').value.trim()};if(!v.number||!v.title||!/^https:\/\//i.test(v.url)){status('ERROR: Enter video number, title and a valid HTTPS URL.');return;}state.videos.push(v);}
   else if(a==='editvideo'){const i=Number($('hh-ss-video-select').value),v={number:$('hh-ss-number').value.trim(),title:$('hh-ss-title').value.trim(),url:$('hh-ss-url').value.trim()};if(!state.videos[i]){status('ERROR: Select an existing video.');return;}if(!v.number||!v.title||!/^https:\/\//i.test(v.url)){status('ERROR: Enter video number, title and a valid HTTPS URL.');return;}state.videos[i]=v;}
   else if(a==='deletevideo'){const i=Number($('hh-ss-video-select').value),v=state.videos[i];if(!v){status('ERROR: Select an existing video.');return;}if(!confirm('Delete '+v.number+' — '+v.title+'?'))return;state.videos.splice(i,1);}
-  else if(a==='addpdf'||a==='replacepdf'){const title=$('hh-ss-pdf-title').value.trim(),description=$('hh-ss-pdf-desc').value.trim(),file=$('hh-ss-pdf-file').files[0];if(!title){status('ERROR: Enter PDF title.');return;}if(!file||(!file.type.includes('pdf')&&!file.name.toLowerCase().endsWith('.pdf'))){status('ERROR: Select a PDF file.');return;}const id=a==='addpdf'?'ss-pdf-'+Date.now()+'-'+Math.random().toString(36).slice(2,7):state.pdfs[Number($('hh-ss-pdf-select').value)]?.id;if(!id){status('ERROR: Select an existing PDF to replace.');return;}try{await savePdf(id,file);if(a==='addpdf')state.pdfs.push({id,title,description,fileName:file.name});else{const p=state.pdfs[Number($('hh-ss-pdf-select').value)];p.title=p.id==='existing-guide'?'YOUR SITUATION – MY VIDEO SOLUTION':title;p.description=p.id==='existing-guide'?'':description;p.fileName=file.name;p.legacyUrl='';p.blobUrl='';} }catch(e){status('ERROR: '+e.message);return;}}
-  if(!persist())return;render();clearFields();status(a==='deletevideo'?'SUCCESS: Situation–Solution video deleted in this browser.':a==='editvideo'?'SUCCESS: Situation–Solution video updated in this browser.':a==='addvideo'?'SUCCESS: Situation–Solution video added in this browser.':a==='addpdf'?'SUCCESS: PDF added in this browser.':'SUCCESS: Existing PDF replaced in this browser.');
+  else if(a==='addpdf'||a==='replacepdf'){const title=$('hh-ss-pdf-title').value.trim(),description=$('hh-ss-pdf-desc').value.trim(),file=$('hh-ss-pdf-file').files[0];if(!title){status('ERROR: Enter PDF title.');return;}if(!file||(!file.type.includes('pdf')&&!file.name.toLowerCase().endsWith('.pdf'))){status('ERROR: Select a PDF file.');return;}const id=a==='addpdf'?'ss-pdf-'+Date.now()+'-'+Math.random().toString(36).slice(2,7):state.pdfs[Number($('hh-ss-pdf-select').value)]?.id;if(!id){status('ERROR: Select an existing PDF to replace.');return;}try{
+   const base64=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(',')[1]||'');reader.onerror=()=>reject(new Error('Could not read the selected PDF.'));reader.readAsDataURL(file);});
+   const upload=await fetch('/api/pdf',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({fileName:file.name,contentBase64:base64})});
+   const uploaded=await upload.json().catch(()=>({}));
+   if(upload.status===401){status('ADMIN SIGN-IN REQUIRED. Select ADMIN SIGN IN above, then sign in with the authorised GitHub account.');return;}
+   if(!upload.ok||!uploaded.ok){status(uploaded.error||'PDF upload failed.');return;}
+   if(a==='addpdf')state.pdfs.push({id,fileUrl:uploaded.fileUrl,title,description,fileName:file.name});
+   else{const p=state.pdfs[Number($('hh-ss-pdf-select').value)];p.title=p.id==='existing-guide'?'YOUR SITUATION – MY VIDEO SOLUTION':title;p.description=p.id==='existing-guide'?'':description;p.fileName=file.name;p.fileUrl=uploaded.fileUrl;p.legacyUrl='';p.blobUrl='';}
+  }catch(e){status('ERROR: '+e.message);return;}}
+  if(!await persist())return;render();clearFields();status(a==='deletevideo'?'PUBLISHED: Situation–Solution video deleted from the website.':a==='editvideo'?'PUBLISHED: Situation–Solution video updated on the website.':a==='addvideo'?'PUBLISHED: Situation–Solution video added to the website.':a==='addpdf'?'PUBLISHED: PDF added to the website.':'PUBLISHED: Existing PDF replaced on the website.');
  });
  render();update();
 });
