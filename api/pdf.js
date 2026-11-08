@@ -1,4 +1,5 @@
 const crypto=require("node:crypto");
+module.exports.config={api:{bodyParser:{sizeLimit:"6mb"}}};
 const {json,requireAdmin,github}=require("./_lib");
 const REPO=process.env.GITHUB_REPOSITORY||"echscoregroup/echs-help-24x7";
 const BRANCH=process.env.GITHUB_BRANCH;
