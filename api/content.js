@@ -16,7 +16,7 @@ function validPayload(type,data){
   if(type==="videos"){
     return Array.isArray(data)&&data.length<=200&&data.every(c=>c&&typeof c.category==="string"&&c.category.trim()&&Array.isArray(c.rows)&&c.rows.length<=500&&c.rows.every(v=>v&&typeof v.number==="string"&&typeof v.title==="string"&&/^https:\/\//i.test(v.url||"")));
   }
-  return type==="situation"&&data&&Array.isArray(data.videos)&&Array.isArray(data.pdfs)&&data.videos.length<=500&&data.pdfs.length<=200&&data.videos.every(v=>v&&typeof v.number==="string"&&typeof v.title==="string"&&/^https:\/\//i.test(v.url||""))&&data.pdfs.every(p=>p&&typeof p.id==="string"&&typeof p.title==="string"&&typeof p.fileName==="string"&&(p.fileUrl===""||/^https:\/\//i.test(p.fileUrl||"")));
+  return type==="situation"&&data&&Array.isArray(data.videos)&&Array.isArray(data.pdfs)&&data.videos.length<=500&&data.pdfs.length<=200&&data.videos.every(v=>v&&typeof v.number==="string"&&typeof v.title==="string"&&/^https:\/\//i.test(v.url||""))&&data.pdfs.every(p=>p&&typeof p.id==="string"&&typeof p.title==="string"&&typeof p.fileName==="string"&&(p.fileUrl==null||p.fileUrl===""||/^https:\/\//i.test(p.fileUrl)));
 }
 module.exports=async(req,res)=>{
   res.setHeader("Access-Control-Allow-Origin", process.env.PUBLIC_SITE_ORIGIN||"*");
