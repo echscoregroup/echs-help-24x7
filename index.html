@@ -501,7 +501,7 @@ document.addEventListener('DOMContentLoaded',function(){
   }catch(e){status('ERROR: '+e.message);return;}}
   if(!await persist())return;render();clearFields();status(a==='deletevideo'?'PUBLISHED: Situation–Solution video deleted from the website.':a==='editvideo'?'PUBLISHED: Situation–Solution video updated on the website.':a==='addvideo'?'PUBLISHED: Situation–Solution video added to the website.':a==='addpdf'?'PUBLISHED: PDF added to the website.':'PUBLISHED: Existing PDF replaced on the website.');
  });
- render();update();
+ (async()=>{try{const r=await fetch('/api/content?type=situation',{cache:'no-store'});const j=await r.json();if(r.ok&&j.ok&&j.found&&j.data&&Array.isArray(j.data.videos)&&Array.isArray(j.data.pdfs))state=j.data;}catch(e){console.warn('Shared Situation–Solution not available; showing baseline content.',e);}render();update();})();
 });
 </script>
 
