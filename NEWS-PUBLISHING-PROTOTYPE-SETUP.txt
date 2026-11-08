@@ -1,45 +1,68 @@
-HELPING HANDS FOR ECHS — SECURE NEWS PUBLISHING PROTOTYPE
-Development branch only: 2.0-development
-Production repositories/branches are not used or modified.
+HELPING HANDS FOR ECHS — BOX 1 & BOX 2 SHARED PUBLISHING
+Build 1.0.4 — isolated test branch only
 
-WHAT THIS PROTOTYPE DOES
-- Adds a simple NEWS ADMIN page.
-- Administrator signs in with GitHub.
-- The server verifies the signed-in GitHub account against ADMIN_GITHUB_LOGIN.
-- The GitHub access token is kept in an encrypted, HttpOnly, Secure cookie; it is not placed in browser JavaScript.
-- PUBLISH validates date, headline and plain-text content, then commits news-data.json to 2.0-development.
-- Existing news records are retained and newest dates are sorted first.
-- Public site continues to read news-data.json.
+GITHUB SAFEGUARDS
+- Development repository: echscoregroup/echs-help-24x7
+- Working branch: HH-WEBSITE-PUBLISHING-TEST-1.0.4
+- The publishing API is hard-pinned to this branch and repository.
+- Do not modify ECHSHELP, the existing user-facing production repository, or the existing live GitHub Pages branch.
+- Existing admin-facing test branch is not changed by this work.
 
-IMPORTANT LIMITATION
-This is source code for a prototype, not yet a live working service. GitHub Pages alone cannot run the API routes. A Vercel deployment (or equivalent Node serverless host), GitHub App OAuth credentials and environment variables must be configured before the button can publish. Do not enter GitHub tokens into the HTML page.
+WHAT HAS BEEN IMPLEMENTED IN SOURCE
+- api/content.js: public read + authorised write for Box 1 video library and Box 2 Situation–Solution metadata.
+- api/pdf.js: authorised PDF upload to published-files/ on the isolated test branch (PDF limit 4 MB).
+- Existing Box 1 and Box 2 save controls now call the shared publishing APIs.
+- Public page scripts load the published JSON before rendering, retaining the existing visitor card/link classes.
+- Both admin areas have an ADMIN SIGN IN link.
+- Existing GitHub OAuth session helper is reused. The callback returns to the website.
+- PDF cards use the shared raw GitHub file URL after upload.
+- No GitHub credential is placed in browser JavaScript.
 
-REQUIRED HOSTING CONFIGURATION
-1. Create a Vercel project from echscoregroup/echs-help-24x7 and select branch 2.0-development.
-2. Configure APP_BASE_URL to the assigned HTTPS Vercel deployment URL.
-3. Create a GitHub App OAuth user authorization flow / GitHub App and configure its callback URL as APP_BASE_URL + /api/auth/callback.
-4. Install the GitHub App only on echscoregroup/echs-help-24x7 and grant Contents: Read and write. Use GitHub App user authorization (not a broad personal access token).
-5. Set environment variables:
+IMPORTANT: NOT YET A LIVE WORKING SERVICE
+GitHub Pages cannot execute the API routes. A Vercel (or equivalent Node serverless) deployment is required. The source changes are committed to the test branch, but hosting, OAuth configuration and end-to-end browser testing have not been completed.
+
+HOSTING SETUP REQUIRED BEFORE USER TEST
+1. Create a Vercel project connected to echscoregroup/echs-help-24x7.
+2. Select HH-WEBSITE-PUBLISHING-TEST-1.0.4 as the Vercel deployment branch. Do not change GitHub Pages settings.
+3. Obtain the stable HTTPS deployment URL and set APP_BASE_URL to that exact URL.
+4. Configure a GitHub OAuth-capable app/client with callback:
+   APP_BASE_URL + /api/auth/callback
+   It must be authorised to write contents to the public repository. The sign-in flow requests public_repo scope.
+5. Set Vercel environment variables:
    APP_BASE_URL = exact HTTPS Vercel deployment URL
-   GITHUB_APP_CLIENT_ID = GitHub App client ID
-   GITHUB_APP_CLIENT_SECRET = GitHub App client secret
-   ADMIN_GITHUB_LOGIN = authorised GitHub login
-   SESSION_SECRET = long random secret (32+ random bytes)
-   GITHUB_REPOSITORY = echscoregroup/echs-help-24x7
-   GITHUB_BRANCH = 2.0-development
-6. Redeploy after setting variables.
+   GITHUB_APP_CLIENT_ID = OAuth client ID
+   GITHUB_APP_CLIENT_SECRET = OAuth client secret
+   ADMIN_GITHUB_LOGIN = exact authorised GitHub login
+   SESSION_SECRET = long random secret (at least 32 random bytes)
+6. Redeploy the Vercel project after setting environment variables.
+7. Keep the Vercel project and deployment URL private until administrator sign-in and write permissions are verified. The website itself is public.
 
-TESTS BEFORE USE
+TESTS REQUIRED
+A. Authentication
 - Unauthenticated visitor cannot publish.
-- Only the configured GitHub login can sign in.
-- Successful publish creates a commit only on 2.0-development.
-- Invalid/missing fields are rejected.
-- Existing news is retained.
-- Public news appears on the development site.
-- No credential appears in page source, browser storage, or network responses.
+- Only ADMIN_GITHUB_LOGIN can sign in.
+- Session cookie is HttpOnly, Secure and time-limited.
+- No token appears in page source, localStorage or browser JavaScript.
 
-NOT YET INCLUDED
-- Editing and deleting previously published items.
-- Deployment configuration and real OAuth credentials.
-- Full end-to-end test on a hosted development URL.
-These must be completed and tested before calling this a working publishing feature.
+B. Box 1
+- Load existing video categories from website.
+- Add video; verify commit on HH-WEBSITE-PUBLISHING-TEST-1.0.4.
+- Verify visitor page in another browser/incognito shows it.
+- Edit video, delete video, create category + first video, edit category name.
+- Verify visitor page after each publish.
+
+C. Box 2
+- Add/edit/delete Situation–Solution video.
+- Add PDF and replace PDF.
+- Verify uploaded PDF appears under published-files/ on the test branch.
+- Verify PDF opens from visitor page on another device/browser.
+
+D. Visual regression
+- Compare current visitor website with the existing approved build.
+- Confirm fonts, spacing, colours, visibility, layout, mobile/desktop presentation, WATCH VIDEO and OPEN PDF behaviour remain unchanged.
+
+LIMITATIONS / OPEN ITEMS
+- The old browser-local test data is not automatically transferred between the GitHub Pages origin and the new Vercel origin. Before first live test, export/import any locally tested records that must be preserved; do not overwrite tested records.
+- PDF upload and metadata publish are separate commits. If metadata publish fails after upload, the uploaded PDF may remain unused in published-files/ and can be cleaned up after verification.
+- The API writes one JSON file per box; it does not write to ECHSHELP or any production branch.
+- A successful GitHub commit is not sufficient acceptance. Cross-browser visitor visibility and visual regression tests are mandatory.
